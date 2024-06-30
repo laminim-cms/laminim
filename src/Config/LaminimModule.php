@@ -38,4 +38,9 @@ class LaminimModule
     {
         return static::$MODS;
     }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
 }

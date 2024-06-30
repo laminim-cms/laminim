@@ -2,7 +2,7 @@
 
 namespace LaminimCMS\Config;
 
-use LaminimCMS\Http\LaminimController;
+use LaminimCMS\Http\DynamicController;
 use Lkt\Http\Routes\GetRoute;
 
 class LaminimRouting
@@ -42,7 +42,7 @@ class LaminimRouting
     {
         $instance = static::getInstance();
 
-        GetRoute::onlyLoggedUsers("/{$instance->path}/api/menu", [LaminimController::class, 'menu']);
+        GetRoute::onlyLoggedUsers("/{$instance->path}/api/menu", [DynamicController::class, 'menu']);
 
         foreach (LaminimModule::getModules() as $module) {
             foreach ($module->getViews() as $view) {

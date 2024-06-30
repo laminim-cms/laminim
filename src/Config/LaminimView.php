@@ -7,15 +7,17 @@ class LaminimView
     protected static array $MODS = [];
 
     protected string $name = '';
+    protected string $type = 'list';
 
     protected $resolver = null;
 
     protected array $params = [];
 
-    public static function register(string $name): static
+    public static function register(string $name, string $type = 'list'): static
     {
         $r = new static();
         $r->name = $name;
+        $r->type = $type;
         static::$MODS[$r->name] = $r;
         return static::$MODS[$r->name];
     }

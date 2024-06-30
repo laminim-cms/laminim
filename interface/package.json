@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "serve": "vite",
+    "host": "vite --host --force"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.23.6",
+    "@types/node": "^20.11.19",
+    "@vitejs/plugin-vue": "^3.2.0",
+    "rollup": "^4.9.6",
+    "typescript": "^5.3.3",
+    "vite": "^3.2.8",
+    "vue-tsc": "^2.0.22"
+  },
+  "dependencies": {
+    "laminim-cms-ui": "github:laminim-cms/laminim-cms-ui",
+    "vue": "^3.3",
+    "vue-router": "^4.2.5",
+    "vuex": "^4.1.0"
+  }
+}
