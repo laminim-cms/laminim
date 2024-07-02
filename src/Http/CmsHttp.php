@@ -26,4 +26,13 @@ class CmsHttp
         return Response::ok(Template::file(__DIR__ . '/../../interface/dist/assets/index.css'))
             ->setContentTypeByFileExtension('css');
     }
+
+    public static function getList(): Response
+    {
+        return Response::ok([
+            'results' => [],
+            'maxPage' => 0,
+            'perms' => ['create', 'update', 'read', 'drop']
+        ]);
+    }
 }

@@ -12,19 +12,17 @@ use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
 
-Schema::add(
-    Schema::table('laminim_modular_blocks', ModularContent::COMPONENT)
-        ->setInstanceSettings(
-            InstanceSettings::define(ModularContent::class)
-                ->setClassNameForGeneratedClass('GeneratedModularContent')
-                ->setQueryCallerClassName('ModularContentQueryBuilder')
-                ->setWhereClassName('ModularContentWhere')
-                ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
-                ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
-        )
-        ->addField(IdField::define('id'))
-        ->addField(StringField::define('type'))
-        ->addField(DateTimeField::define('createdAt', 'created_at'))
-        ->addField(AssocJSONField::define('breakpoints'))
-        ->addField(RelatedKeysField::defineRelation(ModularBlock::COMPONENT, 'modularBlocks', 'modular_content'))
-);
+return Schema::table('laminim_modular_blocks', ModularContent::COMPONENT)
+    ->setInstanceSettings(
+        InstanceSettings::define(ModularContent::class)
+            ->setClassNameForGeneratedClass('GeneratedModularContent')
+            ->setQueryCallerClassName('ModularContentQueryBuilder')
+            ->setWhereClassName('ModularContentWhere')
+            ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
+            ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
+    )
+    ->addField(IdField::define('id'))
+    ->addField(StringField::define('type'))
+    ->addField(DateTimeField::define('createdAt', 'created_at'))
+    ->addField(AssocJSONField::define('breakpoints'))
+    ->addField(RelatedKeysField::defineRelation(ModularBlock::COMPONENT, 'modularBlocks', 'modular_content'));

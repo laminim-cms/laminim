@@ -16,6 +16,9 @@
   },
   "dependencies": {
     "laminim-cms-ui": "github:laminim-cms/laminim-cms-ui",
+    "lkt-accordion": "^1.0.4",
+    "lkt-http-client": "^1.0.30",
+    "lkt-vuex-tools": "^1.0.0",
     "vue": "^3.3",
     "vue-router": "^4.2.5",
     "vuex": "^4.1.0"

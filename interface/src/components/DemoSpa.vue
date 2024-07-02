@@ -4,19 +4,26 @@ import {ref} from "vue";
 
 const columns = [
     createTextColumn('name', 'Título'),
-    createLinkColumn('url', 'Enlace'),
+    createLinkColumn('url', 'Enlace', (item) => item.url),
 ];
 
 const items = ref([
-    {name: 'Home Page', url: '/laminim/users'},
-    {name: 'Projects', url: '/laminim/portfolio/users'},
+    // {name: 'Home Page', url: '/laminim/pages/home-page'},
+    // {name: 'Projects', url: '/laminim/pages/projects'},
 ]);
 </script>
 
 <template>
 <lkt-table
+    resource="ls-pages"
+    :perms="['create', 'update', 'drop']"
     v-model="items"
     :columns="columns"
+    edit-mode
+    can-create
+    create-text="Add page"
+    create-icon="icon-check2"
+    create-route="/laminim/new-page"
 ></lkt-table>
 </template>
 
