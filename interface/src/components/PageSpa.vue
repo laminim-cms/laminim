@@ -1,16 +1,39 @@
 <script setup lang="ts">
 import {createLinkColumn, createTextColumn} from "lkt-table";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {ModularBlock} from "laminim-cms-ui";
+import {HTTPResponse} from "lkt-http-client";
+import {useRoute} from "vue-router";
+
+const props = withDefaults(defineProps<{
+    onCreate?: Function
+    onUpdate?: Function
+}>(), {});
+
+const route = useRoute();
+const type = route.params.type;
+console.log('route',route);
 
 const columns = [
     createTextColumn('name', 'Título'),
     createLinkColumn('url', 'Enlace', (item) => item.url),
 ];
 
-const item = ref({
+const onUpdateCb = (response: HTTPResponse) => {
+    if (typeof props.onUpdate === 'function') {
+        //@ts-ignore
+        props.onUpdate(response);
+    }
+};
+
+const Item = ref({
     name: '',
+    modularBlocks: [],
 });
+
+const perms = ref(<string[]>[]),
+    crud = ref(null)
+;
 
 let items = [
     new ModularBlock({
@@ -20,45 +43,66 @@ let items = [
             {type: 'from-640px', items: '2', visible: false},
         ],
         content: [
-            {type: 'text'},
-            {type: 'multimedia'},
+            {type: 'inline-text-block'},
+            {type: 'image'},
         ]
     })
 ];
+
+const readProps = computed(() => {
+        return {
+            slug: 'hola-mundo'
+        }
+    }),
+    updateProps = computed(() => {
+        return {...readProps.value, ...Item.value};
+    }),
+    computedBudgetUseSlotData = computed(() => {
+        return {
+            props: {
+            }
+        }
+    });
 </script>
 
 <template>
     <div class="lkt-grid-1">
-        <h1>This is a page detail</h1>
+        <lkt-item-crud
+            ref="crud"
+            v-model="Item"
+            :title="Item.name"
 
-        <lkt-field-text
-            v-model="item.name"
-            label="Name"
-        />
+            read-resource="r-pages"
+            :read-data="readProps"
 
+            update-resource="up-pages"
+            :update-data="updateProps"
+            :on-update="onUpdate"
 
-        <lkt-table
-            item-mode
-            :perms="['create', 'update', 'drop']"
-            edit-mode
-            can-create
-            can-drop
-            switch-edition-enabled
-            create-text="Add block"
-            create-icon="icon-check2"
             drop-text="Delete"
             drop-icon="icon-delete-outline"
-            v-model="items"
-            items-container-class="lkt-grid-1"
-            :new-value-generator="() => new ModularBlock().setIsOpen()"
+
+            save-icon="icon-floppy"
+
+            v-on:perms="(p: string[]) => perms = p"
+            v-on:update="onUpdateCb"
+            :data-state-config="{preventProps: ['isOpen']}"
         >
-            <template #item="{item, index, isLoading, canCreate, canUpdate, canDrop, canRead, doDrop}">
-                <laminim-modular-block
-                    v-model="items[index]"
-                    :index="index"
-                    :do-drop="doDrop"/>
+            <template v-slot:item="{item, editMode, loading, isCreate, canUpdate, canDrop, itemBeingEdited}">
+
+                <lkt-field-text
+                    v-model="item.name"
+                    label="Name"
+                    :read-mode="!editMode"
+                />
+
+                <lmm-modular-blocks
+                    v-model="Item.modularBlocks"
+                    :edit-mode="editMode"
+                />
+
             </template>
-        </lkt-table>
+        </lkt-item-crud>
     </div>
 </template>
 

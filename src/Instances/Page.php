@@ -6,5 +6,5 @@ use LaminimCMS\Generated\GeneratedPage;
 
 class Page extends GeneratedPage
 {
-    const COMPONENT = 'laminim-page';
+    const COMPONENT = 'lmm-pages';
 }

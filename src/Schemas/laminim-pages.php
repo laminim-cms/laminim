@@ -7,7 +7,7 @@ use LaminimCMS\Instances\ModularBlock;
 use LaminimCMS\Instances\Page;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\IdField;
-use Lkt\Factory\Schemas\Fields\RelatedKeysField;
+use Lkt\Factory\Schemas\Fields\RelatedField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
@@ -21,11 +21,30 @@ return Schema::table('laminim_pages', Page::COMPONENT)
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )
-    ->addField(IdField::define('id'))
-    ->addField(StringField::define('name'))
-    ->addField(DateTimeField::define('createdAt', 'created_at'))
+    ->setFieldsForView('index', ['id', 'name', 'createdAt'])
+    ->setFieldsForRelatedMode('id', 'name', ['createdAt'])
     ->addField(
-        RelatedKeysField::defineRelation(ModularBlock::COMPONENT, 'modularBlocks', 'item_id')
-        ->setWhere(ModularBlockWhere::typeEqual('lmm-page'))
+        IdField::define('id')
+            ->setLabel('__:lmm.id')
+            ->setIsDataInUpdateView()
     )
-    ;
+    ->addField(
+        StringField::define('name')
+            ->setIsI18nJson()
+            ->setLabel('__:lmm.name')
+            ->setIsEditableInCreateView()
+            ->setIsEditableInUpdateView()
+    )
+    ->addField(
+        DateTimeField::define('createdAt', 'created_at')
+            ->setLabel('__:lmm.createdAt')
+            ->setIsVisibleInUpdateView()
+    )
+    ->addField(
+        RelatedField::defineRelation(ModularBlock::COMPONENT, 'modularBlocks', 'item_id')
+            ->setWhere(ModularBlockWhere::typeEqual('lmm-page'))
+            ->setLabel('__:lmm.modularBlocks')
+            ->setIsEditableInCreateView()
+            ->setIsEditableInUpdateView()
+            ->setCustomType('lmm-modular-blocks')
+    );
