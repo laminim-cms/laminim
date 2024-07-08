@@ -55,6 +55,7 @@ class Laminim
         GetRoute::register('/laminim/app.css', [CmsHttp::class, 'publicAppCss']);
 
         // View routes
+        GetRoute::register('/laminim/ls/{type}', [CmsHttp::class, 'indexHTML']);
         GetRoute::register('/laminim/new/{type}', [CmsHttp::class, 'indexHTML']);
         GetRoute::register('/laminim/edit/{type}/{id}', [CmsHttp::class, 'indexHTML']);
 
@@ -68,25 +69,25 @@ class Laminim
             foreach ($config['schemas'] as $schema) {
                 Schema::add($schema);
             }
-            foreach ($config['routes'] as $route) {
-                switch ($route['type']) {
-                    case 'GET':
-                        GetRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
-                        break;
-
-                    case 'POST':
-                        PostRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
-                        break;
-
-                    case 'PUT':
-                        PutRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
-                        break;
-
-                    case 'DELETE':
-                        DeleteRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
-                        break;
-                }
-            }
+//            foreach ($config['routes'] as $route) {
+//                switch ($route['type']) {
+//                    case 'GET':
+//                        GetRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
+//                        break;
+//
+//                    case 'POST':
+//                        PostRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
+//                        break;
+//
+//                    case 'PUT':
+//                        PutRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
+//                        break;
+//
+//                    case 'DELETE':
+//                        DeleteRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
+//                        break;
+//                }
+//            }
         }
 
         // Wildcard at the end (catch all)
@@ -101,28 +102,8 @@ class Laminim
                 require_once "Schemas/laminim-modular-blocks.php",
                 require_once "Schemas/laminim-modular-content.php",
             ],
-            'routes' => [
-                [
-                    'route' => '/laminim/ls/page',
-                    'callable' => [CmsHttp::class, 'indexHTML'],
-                    'type' => 'GET',
-                ],
-                [
-                    'route' => '/laminim/pages/list',
-                    'callable' => [CmsHttp::class, 'indexItems'],
-                    'type' => 'GET',
-                ],
-                [
-                    'route' => '/laminim/page/{slug}',
-                    'callable' => [CmsHttp::class, 'indexHTML'],
-                    'type' => 'GET',
-                ],
-                [
-                    'route' => '/laminim/pages/{slug}',
-                    'callable' => [CmsHttp::class, 'readItem'],
-                    'type' => 'GET',
-                ],
-            ]
+//            'routes' => [
+//            ]
         ];
     }
 }
