@@ -21,8 +21,8 @@ return Schema::table('laminim_modular_blocks', ModularContent::COMPONENT)
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )
+    ->setFieldsForRelatedMode('', '', ['id', 'type', 'breakpoints'])
     ->addField(IdField::define('id'))
     ->addField(StringField::define('type'))
     ->addField(DateTimeField::define('createdAt', 'created_at'))
-    ->addField(AssocJSONField::define('breakpoints'))
-    ->addField(RelatedKeysField::defineRelation(ModularBlock::COMPONENT, 'modularBlocks', 'modular_content'));
+    ->addField(AssocJSONField::define('breakpoints'));

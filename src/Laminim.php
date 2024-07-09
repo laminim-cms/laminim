@@ -64,6 +64,7 @@ class Laminim
         GetRoute::register('/laminim/{type}/index', [CmsHttp::class, 'indexItems']);
         GetRoute::register('/laminim/{type}/{id}/read', [CmsHttp::class, 'readItem']);
         PostRoute::register('/laminim/{type}/create', [CmsHttp::class, 'createItem']);
+        PutRoute::register('/laminim/{type}/{id}/update', [CmsHttp::class, 'updateItem']);
 
         foreach (static::$modules as $module => $config) {
             foreach ($config['schemas'] as $schema) {

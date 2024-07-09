@@ -127,37 +127,27 @@ class CmsHttp
         $item::feedInstance($item, $data);
         $item->save();
 
-        // Assign external table fields
-        foreach ($data as $key => $datum) {
+        return Response::ok([
+            'item' => ['id' => $item->getId()],
+        ]);
+    }
 
-        }
+    public static function updateItem($params = []): Response
+    {
+        $type = clearInput($params['type']);
+        $id = clearInput($params['id']);
+        $decodedType = Laminim::getModuleByAlias($type);
+        $schema = Schema::get($decodedType);
 
-        dd($item);
+        $data = $params['data'];
+        $item = Instantiator::make($decodedType, $id);
 
-        $fields = [];
-        $item = [];
-
-        /** @var AbstractField $field */
-        foreach ($schema->getFieldsAvailableInCreateView() as $field) {
-            $fields[] = [
-                'key' => $field->getName(),
-                'label' => $field->getLabel(),
-                'type' => $field->getCustomType(),
-                'mode' => $field->getModeInCreateView(),
-            ];
-
-            $val = '';
-            if ($field->getCustomType() === 'lmm-modular-blocks') $val = [];
-
-
-            $item[$field->getName()] = $val;
-        }
+        // Assign same table fields
+        $item::feedInstance($item, $data);
+        $item->save();
 
         return Response::ok([
-            'fields' => $fields,
-            'item' => $item,
-            'maxPage' => 0,
-            'perms' => ['create', 'update', 'read', 'drop']
+            'item' => ['id' => $item->getId()],
         ]);
     }
 
@@ -183,12 +173,7 @@ class CmsHttp
 
 
         $instance = Instantiator::make($decodedType, $identifier);
-
-        $r = [];
-        foreach ($viewFields as $field) {
-            $getter = $field->getGetterForPrimitiveValue();
-            $r[$field->getName()] = $instance->{$getter}();
-        }
+        $r = $instance->readFields($viewFields);
 
         return Response::ok([
             'fields' => $fields,
