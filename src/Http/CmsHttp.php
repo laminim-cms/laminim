@@ -2,6 +2,7 @@
 
 namespace LaminimCMS\Http;
 
+use LaminimCMS\Instances\ModularBlock;
 use LaminimCMS\Laminim;
 use Lkt\Factory\Instantiator\Instances\AbstractInstance;
 use Lkt\Factory\Instantiator\Instantiator;

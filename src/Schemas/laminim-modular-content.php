@@ -2,17 +2,15 @@
 
 namespace LaminimCMS\Schemas;
 
-use LaminimCMS\Instances\ModularBlock;
 use LaminimCMS\Instances\ModularContent;
 use Lkt\Factory\Schemas\Fields\AssocJSONField;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\IdField;
-use Lkt\Factory\Schemas\Fields\RelatedKeysField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
 
-return Schema::table('laminim_modular_blocks', ModularContent::COMPONENT)
+return Schema::table('laminim_modular_content', ModularContent::COMPONENT)
     ->setInstanceSettings(
         InstanceSettings::define(ModularContent::class)
             ->setClassNameForGeneratedClass('GeneratedModularContent')
@@ -21,8 +19,9 @@ return Schema::table('laminim_modular_blocks', ModularContent::COMPONENT)
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )
-    ->setFieldsForRelatedMode('', '', ['id', 'type', 'breakpoints'])
+    ->setFieldsForRelatedMode('', '', ['id', 'type'])
     ->addField(IdField::define('id'))
     ->addField(StringField::define('type'))
     ->addField(DateTimeField::define('createdAt', 'created_at'))
-    ->addField(AssocJSONField::define('breakpoints'));
+    ->addField(AssocJSONField::define('breakpoints'))
+    ;
