@@ -5,8 +5,8 @@ namespace LaminimCMS;
 use LaminimCMS\Config\LaminimModule;
 use LaminimCMS\Http\CmsHttp;
 use LaminimCMS\Instances\Page;
+use LaminimCMS\Instances\UserRole;
 use Lkt\Factory\Schemas\Schema;
-use Lkt\Http\Routes\DeleteRoute;
 use Lkt\Http\Routes\GetRoute;
 use Lkt\Http\Routes\PostRoute;
 use Lkt\Http\Routes\PutRoute;
@@ -20,6 +20,8 @@ class Laminim
     protected static array $modulesAliases = [
         'page' => Page::COMPONENT,
         'pages' => Page::COMPONENT,
+        'role' => UserRole::COMPONENT,
+        'roles' => UserRole::COMPONENT,
     ];
 
     public static function getModuleByAlias(string $alias)
@@ -100,8 +102,6 @@ class Laminim
         static::$modules['lmm-pages'] = [
             'schemas' => [
                 require_once "Schemas/laminim-pages.php",
-                require_once "Schemas/laminim-modular-blocks.php",
-                require_once "Schemas/laminim-modular-content.php",
             ],
 //            'routes' => [
 //            ]

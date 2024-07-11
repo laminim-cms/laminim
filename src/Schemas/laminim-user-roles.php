@@ -2,31 +2,35 @@
 
 namespace LaminimCMS\Schemas;
 
-use LaminimCMS\Generated\ModularBlockWhere;
-use LaminimCMS\Instances\ModularBlock;
-use LaminimCMS\Instances\Page;
+use LaminimCMS\Instances\UserRole;
+use Lkt\Factory\Schemas\Fields\AssocJSONField;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\IdField;
-use Lkt\Factory\Schemas\Fields\RelatedField;
+use Lkt\Factory\Schemas\Fields\MethodGetterField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
 
-return Schema::table('lmm_pages', Page::COMPONENT)
+return Schema::table('lmm_user_roles', UserRole::COMPONENT)
     ->setInstanceSettings(
-        InstanceSettings::define(Page::class)
-            ->setClassNameForGeneratedClass('GeneratedPage')
-            ->setQueryCallerClassName('PageQueryBuilder')
-            ->setWhereClassName('PageWhere')
+        InstanceSettings::define(UserRole::class)
+            ->setClassNameForGeneratedClass('GeneratedUserRole')
+            ->setQueryCallerClassName('UserRoleQueryBuilder')
+            ->setWhereClassName('UserRoleWhere')
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )
     ->setFieldsForView('index', ['id', 'name', 'createdAt'])
-    ->setFieldsForRelatedMode('id', 'name', ['createdAt'])
+    ->setFieldsForRelatedMode('id', 'name', [])
     ->addField(
         IdField::define('id')
             ->setLabel('__:lmm.id')
             ->setIsDataInUpdateView()
+    )
+    ->addField(
+        DateTimeField::define('createdAt', 'created_at')
+            ->setLabel('__:lmm.createdAt')
+            ->setIsVisibleInUpdateView()
     )
     ->addField(
         StringField::define('name')
@@ -36,16 +40,12 @@ return Schema::table('lmm_pages', Page::COMPONENT)
             ->setIsEditableInUpdateView()
     )
     ->addField(
-        DateTimeField::define('createdAt', 'created_at')
-            ->setLabel('__:lmm.createdAt')
-            ->setIsVisibleInUpdateView()
+        AssocJSONField::define('config')
     )
     ->addField(
-        RelatedField::defineRelation(ModularBlock::COMPONENT, 'modularBlocks', 'itemId')
-            ->addRelatedComponentFeed('type', 'lmm-page')
-            ->setWhere(ModularBlockWhere::typeEqual('lmm-page'))
-            ->setLabel('__:lmm.modularBlocks')
+        MethodGetterField::define('getPreparedConfig', 'config')
+            ->setLabel('__:lmm.rolePermConfig')
+            ->setCustomType('lmm-modular-perms')
             ->setIsEditableInCreateView()
             ->setIsEditableInUpdateView()
-            ->setCustomType('lmm-modular-blocks')
     );

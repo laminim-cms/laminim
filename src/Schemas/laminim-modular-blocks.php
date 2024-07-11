@@ -12,7 +12,7 @@ use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
 
-return Schema::table('laminim_modular_blocks', ModularBlock::COMPONENT)
+return Schema::table('lmm_modular_blocks', ModularBlock::COMPONENT)
     ->setInstanceSettings(
         InstanceSettings::define(ModularBlock::class)
             ->setClassNameForGeneratedClass('GeneratedModularBlock')

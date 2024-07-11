@@ -8,7 +8,7 @@ class Laminim00000101000001 extends AbstractMigration
     public function change()
     {
         $this
-            ->table('laminim_modular_blocks', ['collation' => 'utf8_general_ci'])
+            ->table('lmm_modular_blocks', ['collation' => 'utf8_general_ci'])
             ->addColumn('created_at', 'datetime', ['null' => true, 'default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('name', 'json')
             ->addColumn('type', 'string', ['limit' => 255, 'default' => ''])

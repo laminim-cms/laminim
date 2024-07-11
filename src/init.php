@@ -2,18 +2,21 @@
 
 namespace LaminimCMS;
 
-use LaminimCMS\Http\CmsHttp;
-use Lkt\Http\Routes\GetRoute;
+use LaminimCMS\Instances\Page;
+use LaminimCMS\Instances\Permission;
+use Lkt\Factory\Schemas\Schema;
 use Lkt\Phinx\PhinxConfigurator;
 
-//require_once "Schemas/laminim-pages.php";
-//require_once "Schemas/laminim-modular-blocks.php";
-//require_once "Schemas/laminim-modular-content.php";
-//
-//GetRoute::register('/laminim', [CmsHttp::class, 'home']);
-//GetRoute::register('/laminim/app.js', [CmsHttp::class, 'publicAppJs']);
-//GetRoute::register('/laminim/app.css', [CmsHttp::class, 'publicAppCss']);
 
+// Load schemas
+Schema::add(require_once "Schemas/laminim-modular-blocks.php");
+Schema::add(require_once "Schemas/laminim-modular-content.php");
+Schema::add(require_once "Schemas/laminim-user-roles.php");
+
+Permission::enableComponentPermission(Page::COMPONENT, 'create');
+Permission::enableComponentPermission(Page::COMPONENT, 'read');
+Permission::enableComponentPermission(Page::COMPONENT, 'update');
+Permission::enableComponentPermission(Page::COMPONENT, 'drop');
 
 // Only for CLI
 if (php_sapi_name() == 'cli') {

@@ -7,6 +7,7 @@ use LaminimCMS\Laminim;
 use Lkt\Factory\Instantiator\Instances\AbstractInstance;
 use Lkt\Factory\Instantiator\Instantiator;
 use Lkt\Factory\Schemas\Fields\AbstractField;
+use Lkt\Factory\Schemas\Fields\MethodGetterField;
 use Lkt\Factory\Schemas\Schema;
 use Lkt\Http\Response;
 use Lkt\Http\Router;
@@ -44,10 +45,12 @@ class CmsHttp
         $fields = [];
         $item = [];
 
-        /** @var AbstractField $field */
-        foreach ($schema->getFieldsAvailableInCreateView() as $field) {
+        /** @var AbstractField[] $viewFields */
+        $viewFields = $schema->getFieldsAvailableInCreateView();
+
+        foreach ($viewFields as $field) {
             $fields[] = [
-                'key' => $field->getName(),
+                'key' => $field instanceof MethodGetterField ? $field->getColumn() : $field->getName(),
                 'label' => $field->getLabel(),
                 'type' => $field->getCustomType(),
                 'mode' => $field->getModeInCreateView(),
@@ -61,6 +64,9 @@ class CmsHttp
             }
             $item[$field->getName()] = $val;
         }
+
+        $instance = Instantiator::make($decodedType, 0);
+        $item = $instance->readFields($viewFields);
 
         return Response::ok([
             'fields' => $fields,
@@ -83,7 +89,7 @@ class CmsHttp
 
         foreach ($viewFields as $field) {
             $fields[] = [
-                'key' => $field->getName(),
+                'key' => $field instanceof MethodGetterField ? $field->getColumn() : $field->getName(),
                 'label' => $field->getLabel(),
                 'type' => $field->getCustomType(),
                 'mode' => $field->getModeInCreateView(),
@@ -165,7 +171,7 @@ class CmsHttp
 
         foreach ($viewFields as $field) {
             $fields[] = [
-                'key' => $field->getName(),
+                'key' => $field instanceof MethodGetterField ? $field->getColumn() : $field->getName(),
                 'label' => $field->getLabel(),
                 'type' => $field->getCustomType(),
                 'mode' => $field->getModeInCreateView(),
