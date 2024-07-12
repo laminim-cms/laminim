@@ -5,6 +5,7 @@ namespace LaminimCMS;
 use LaminimCMS\Config\LaminimModule;
 use LaminimCMS\Http\CmsHttp;
 use LaminimCMS\Instances\Page;
+use LaminimCMS\Instances\User;
 use LaminimCMS\Instances\UserRole;
 use Lkt\Factory\Schemas\Schema;
 use Lkt\Http\Routes\GetRoute;
@@ -22,6 +23,8 @@ class Laminim
         'pages' => Page::COMPONENT,
         'role' => UserRole::COMPONENT,
         'roles' => UserRole::COMPONENT,
+        'user' => User::COMPONENT,
+        'users' => User::COMPONENT,
     ];
 
     public static function getModuleByAlias(string $alias)
@@ -64,6 +67,7 @@ class Laminim
         // CRUD routes
         GetRoute::register('/laminim/{type}/config', [CmsHttp::class, 'getContentConfig']);
         GetRoute::register('/laminim/{type}/index', [CmsHttp::class, 'indexItems']);
+        GetRoute::register('/laminim/{type}/options', [CmsHttp::class, 'optionItems']);
         GetRoute::register('/laminim/{type}/{id}/read', [CmsHttp::class, 'readItem']);
         PostRoute::register('/laminim/{type}/create', [CmsHttp::class, 'createItem']);
         PutRoute::register('/laminim/{type}/{id}/update', [CmsHttp::class, 'updateItem']);

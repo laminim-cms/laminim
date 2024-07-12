@@ -4,12 +4,14 @@ namespace LaminimCMS\Schemas;
 
 use LaminimCMS\Instances\UserRole;
 use Lkt\Factory\Schemas\Fields\AssocJSONField;
+use Lkt\Factory\Schemas\Fields\BooleanField;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\IdField;
 use Lkt\Factory\Schemas\Fields\MethodGetterField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
+use Lkt\Factory\Schemas\Views\FieldViewConfig;
 
 return Schema::table('lmm_user_roles', UserRole::COMPONENT)
     ->setInstanceSettings(
@@ -20,24 +22,32 @@ return Schema::table('lmm_user_roles', UserRole::COMPONENT)
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )
-    ->setFieldsForView('index', ['id', 'name', 'createdAt'])
     ->setFieldsForRelatedMode('id', 'name', [])
     ->addField(
         IdField::define('id')
             ->setLabel('__:lmm.id')
-            ->setIsDataInUpdateView()
+            ->configureView(FieldViewConfig::dataMode('index'))
+            ->configureView(FieldViewConfig::dataMode('edit'))
     )
     ->addField(
         DateTimeField::define('createdAt', 'created_at')
             ->setLabel('__:lmm.createdAt')
-            ->setIsVisibleInUpdateView()
+            ->configureView(FieldViewConfig::readMode('edit', 'text'))
     )
     ->addField(
         StringField::define('name')
             ->setIsI18nJson()
             ->setLabel('__:lmm.name')
-            ->setIsEditableInCreateView()
-            ->setIsEditableInUpdateView()
+            ->configureView(FieldViewConfig::readMode('index', 'text'))
+            ->configureView(FieldViewConfig::editMode('create', 'text'))
+            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+    )
+    ->addField(
+        BooleanField::define('hasCmsAccess', 'has_cms_access')
+            ->setLabel('__:lmm.hasCmsAccess')
+            ->configureView(FieldViewConfig::readMode('index', 'switch'))
+            ->configureView(FieldViewConfig::editMode('create', 'switch'))
+            ->configureView(FieldViewConfig::editMode('edit', 'switch'))
     )
     ->addField(
         AssocJSONField::define('config')
@@ -45,7 +55,6 @@ return Schema::table('lmm_user_roles', UserRole::COMPONENT)
     ->addField(
         MethodGetterField::define('getPreparedConfig', 'config')
             ->setLabel('__:lmm.rolePermConfig')
-            ->setCustomType('lmm-modular-perms')
-            ->setIsEditableInCreateView()
-            ->setIsEditableInUpdateView()
+            ->configureView(FieldViewConfig::editMode('create', 'lmm-modular-perms'))
+            ->configureView(FieldViewConfig::editMode('edit', 'lmm-modular-perms'))
     );

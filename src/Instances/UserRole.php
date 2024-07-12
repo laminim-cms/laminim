@@ -11,6 +11,7 @@ class UserRole extends GeneratedUserRole
     public function getPreparedConfig(): array
     {
         $currentConfig = $this->getConfig();
+        if (!$currentConfig) $currentConfig = [];
         $config = Permission::getAllComponentPermissions();
         $r = [];
 

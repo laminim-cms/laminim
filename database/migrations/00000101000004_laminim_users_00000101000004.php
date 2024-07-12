@@ -11,6 +11,8 @@ class LaminimUsers00000101000004 extends AbstractMigration
             ->table('lmm_user_roles', ['collation' => 'utf8_general_ci'])
             ->addColumn('created_at', 'datetime', ['null' => true, 'default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('name', 'string', ['limit' => 255, 'default' => ''])
+            ->addColumn('has_cms_access', 'boolean', ['default' => false])
+            ->addColumn('has_admin_access', 'boolean', ['default' => false])
             ->addColumn('config', 'text', ['null' => true, 'default' => null])
             ->create();
 

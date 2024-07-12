@@ -11,6 +11,7 @@ use Lkt\Factory\Schemas\Fields\RelatedField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
+use Lkt\Factory\Schemas\Views\FieldViewConfig;
 
 return Schema::table('lmm_pages', Page::COMPONENT)
     ->setInstanceSettings(
@@ -21,24 +22,25 @@ return Schema::table('lmm_pages', Page::COMPONENT)
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )
-    ->setFieldsForView('index', ['id', 'name', 'createdAt'])
     ->setFieldsForRelatedMode('id', 'name', ['createdAt'])
     ->addField(
         IdField::define('id')
             ->setLabel('__:lmm.id')
-            ->setIsDataInUpdateView()
+            ->configureView(FieldViewConfig::dataMode('index'))
+            ->configureView(FieldViewConfig::dataMode('edit'))
     )
     ->addField(
         StringField::define('name')
             ->setIsI18nJson()
             ->setLabel('__:lmm.name')
-            ->setIsEditableInCreateView()
-            ->setIsEditableInUpdateView()
+            ->configureView(FieldViewConfig::readMode('index', 'text'))
+            ->configureView(FieldViewConfig::editMode('create', 'text'))
+            ->configureView(FieldViewConfig::editMode('edit', 'text'))
     )
     ->addField(
         DateTimeField::define('createdAt', 'created_at')
             ->setLabel('__:lmm.createdAt')
-            ->setIsVisibleInUpdateView()
+            ->configureView(FieldViewConfig::readMode('edit', 'text'))
     )
     ->addField(
         RelatedField::defineRelation(ModularBlock::COMPONENT, 'modularBlocks', 'itemId')

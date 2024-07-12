@@ -2,15 +2,10 @@
 
 namespace LaminimCMS\Http;
 
-use LaminimCMS\Instances\ModularBlock;
 use LaminimCMS\Laminim;
-use Lkt\Factory\Instantiator\Instances\AbstractInstance;
 use Lkt\Factory\Instantiator\Instantiator;
-use Lkt\Factory\Schemas\Fields\AbstractField;
-use Lkt\Factory\Schemas\Fields\MethodGetterField;
 use Lkt\Factory\Schemas\Schema;
 use Lkt\Http\Response;
-use Lkt\Http\Router;
 use Lkt\Locale\Locale;
 use Lkt\Templates\Template;
 use function Lkt\Tools\Parse\clearInput;
@@ -42,35 +37,14 @@ class CmsHttp
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
 
-        $fields = [];
-        $item = [];
-
-        /** @var AbstractField[] $viewFields */
-        $viewFields = $schema->getFieldsAvailableInCreateView();
-
-        foreach ($viewFields as $field) {
-            $fields[] = [
-                'key' => $field instanceof MethodGetterField ? $field->getColumn() : $field->getName(),
-                'label' => $field->getLabel(),
-                'type' => $field->getCustomType(),
-                'mode' => $field->getModeInCreateView(),
-            ];
-
-            $val = '';
-
-            if ($field->getCustomType() === 'lmm-modular-blocks') {
-                $val = [];
-                $item[$field->getName() . 'Id'] = [];
-            }
-            $item[$field->getName()] = $val;
-        }
-
         $instance = Instantiator::make($decodedType, 0);
-        $item = $instance->readFields($viewFields);
+        $r = $instance->readViewFields('create');
+        $fields = $schema->getViewConfigForFields('create');
+
 
         return Response::ok([
             'fields' => $fields,
-            'item' => $item,
+            'item' => $r,
             'maxPage' => 0,
             'perms' => ['create', 'update', 'read', 'drop']
         ]);
@@ -83,18 +57,31 @@ class CmsHttp
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
 
-        $fields = [];
-        /** @var AbstractField[] $viewFields */
-        $viewFields = $schema->getViewFields('index');
 
-        foreach ($viewFields as $field) {
-            $fields[] = [
-                'key' => $field instanceof MethodGetterField ? $field->getColumn() : $field->getName(),
-                'label' => $field->getLabel(),
-                'type' => $field->getCustomType(),
-                'mode' => $field->getModeInCreateView(),
-            ];
-        }
+        $anonymous = Instantiator::make($decodedType, 0);
+        $query = $anonymous::getQueryCaller();
+        $results = $anonymous::getPage($page, $query);
+        $maxPage = $anonymous::getAmountOfPages($query);
+
+        $r = [];
+        foreach ($results as $result) $r[] = $result->readViewFields('index');
+
+        $fields = $schema->getViewConfigForFields('index');
+
+        return Response::ok([
+            'fields' => $fields,
+            'results' => $r,
+            'maxPage' => $maxPage,
+            'perms' => ['create', 'update', 'read', 'drop']
+        ]);
+    }
+
+    public static function optionItems(array $params): Response
+    {
+        $type = clearInput($params['type']);
+        $page = (int)clearInput($params['page']);
+        $decodedType = Laminim::getModuleByAlias($type);
+        $schema = Schema::get($decodedType);
 
 
         $anonymous = Instantiator::make($decodedType, 0);
@@ -103,15 +90,9 @@ class CmsHttp
         $maxPage = $anonymous::getAmountOfPages($query);
 
         $r = [];
-        foreach ($results as $result) {
-            $t = [];
-            foreach ($viewFields as $field) {
-                $getter = $field->getGetterForPrimitiveValue();
-                $t[$field->getName()] = $result->{$getter}();
-            }
+        foreach ($results as $result) $r[] = $result->readAsRelated();
 
-            $r[] = $t;
-        }
+        $fields = $schema->getViewConfigForFields('index');
 
         return Response::ok([
             'fields' => $fields,
@@ -131,7 +112,7 @@ class CmsHttp
         $item = Instantiator::make($decodedType, 0);
 
         // Assign same table fields
-        $item::feedInstance($item, $data);
+        $item::feedInstance($item, $data, 'create');
         $item->save();
 
         return Response::ok([
@@ -150,7 +131,7 @@ class CmsHttp
         $item = Instantiator::make($decodedType, $id);
 
         // Assign same table fields
-        $item::feedInstance($item, $data);
+        $item::feedInstance($item, $data, 'edit');
         $item->save();
 
         return Response::ok([
@@ -165,22 +146,9 @@ class CmsHttp
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
 
-        $fields = [];
-        /** @var AbstractField[] $viewFields */
-        $viewFields = $schema->getFieldsAvailableInUpdateView();
-
-        foreach ($viewFields as $field) {
-            $fields[] = [
-                'key' => $field instanceof MethodGetterField ? $field->getColumn() : $field->getName(),
-                'label' => $field->getLabel(),
-                'type' => $field->getCustomType(),
-                'mode' => $field->getModeInCreateView(),
-            ];
-        }
-
-
         $instance = Instantiator::make($decodedType, $identifier);
-        $r = $instance->readFields($viewFields);
+        $r = $instance->readViewFields('edit');
+        $fields = $schema->getViewConfigForFields('edit');
 
         return Response::ok([
             'fields' => $fields,
