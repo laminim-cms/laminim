@@ -35,6 +35,7 @@ return Schema::table('lmm_users', User::COMPONENT)
     ->addField(
         DateTimeField::define('createdAt', 'created_at')
             ->setLabel('__:lmm.createdAt')
+            ->setDefaultReadFormat('Y-m-d H:i:s')
             ->configureView(FieldViewConfig::readMode('edit', 'text'))
     )
     ->addField(

@@ -32,6 +32,8 @@ return Schema::table('lmm_user_roles', UserRole::COMPONENT)
     ->addField(
         DateTimeField::define('createdAt', 'created_at')
             ->setLabel('__:lmm.createdAt')
+            ->setDefaultReadFormat('Y-m-d H:i:s')
+            ->setDefaultValue(function () { return date('Y-m-d H:i:s'); })
             ->configureView(FieldViewConfig::readMode('edit', 'text'))
     )
     ->addField(

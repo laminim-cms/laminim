@@ -40,6 +40,7 @@ return Schema::table('lmm_pages', Page::COMPONENT)
     ->addField(
         DateTimeField::define('createdAt', 'created_at')
             ->setLabel('__:lmm.createdAt')
+            ->setDefaultReadFormat('Y-m-d H:i:s')
             ->configureView(FieldViewConfig::readMode('edit', 'text'))
     )
     ->addField(
@@ -47,7 +48,6 @@ return Schema::table('lmm_pages', Page::COMPONENT)
             ->addRelatedComponentFeed('type', 'lmm-page')
             ->setWhere(ModularBlockWhere::typeEqual('lmm-page'))
             ->setLabel('__:lmm.modularBlocks')
-            ->setIsEditableInCreateView()
-            ->setIsEditableInUpdateView()
-            ->setCustomType('lmm-modular-blocks')
+            ->configureView(FieldViewConfig::editMode('create', 'lmm-modular-blocks'))
+            ->configureView(FieldViewConfig::editMode('edit', 'lmm-modular-blocks'))
     );
