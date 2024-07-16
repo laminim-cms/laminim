@@ -12,6 +12,7 @@ use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
 use Lkt\Factory\Schemas\Views\FieldViewConfig;
+use Lkt\Factory\Schemas\Views\Layouts\GridLayout;
 
 return Schema::table('lmm_user_roles', UserRole::COMPONENT)
     ->setInstanceSettings(
@@ -36,7 +37,7 @@ return Schema::table('lmm_user_roles', UserRole::COMPONENT)
             ->setLabel('__:lmm.createdAt')
             ->setDefaultReadFormat('Y-m-d H:i:s')
             ->setCurrentTimeStampAsDefaultValue()
-            ->configureView(FieldViewConfig::readMode('edit', 'text'))
+            ->configureView(FieldViewConfig::readMode('edit', 'date'))
     )
     ->addField(
         StringField::define('name')
@@ -61,4 +62,16 @@ return Schema::table('lmm_user_roles', UserRole::COMPONENT)
             ->setLabel('__:lmm.rolePermConfig')
             ->configureView(FieldViewConfig::editMode('create', 'lmm-modular-perms'))
             ->configureView(FieldViewConfig::editMode('edit', 'lmm-modular-perms'))
-    );
+    )
+    ->setLayout(GridLayout::define('create', 1, [
+            GridLayout::define('main-data', 2, ['name', 'hasCmsAccess']),
+            'config'
+        ]
+    ))
+    ->setLayout(GridLayout::define('edit', 1, [
+            'createdAt',
+            GridLayout::define('main-data', 2, ['name', 'hasCmsAccess']),
+            'config'
+        ]
+    ))
+    ;

@@ -25,6 +25,8 @@ class LaminimUsers00000101000004 extends AbstractMigration
             ->addColumn('password', 'string', ['limit' => 255, 'default' => ''])
             ->addColumn('status', 'string', ['limit' => 20, 'default' => ''])
             ->addColumn('assigned_roles', 'text', ['null' => true, 'default' => null])
+            ->addColumn('has_custom_permissions', 'boolean', ['default' => false])
+            ->addColumn('custom_permissions', 'text', ['null' => true, 'default' => null])
             ->create();
     }
 }

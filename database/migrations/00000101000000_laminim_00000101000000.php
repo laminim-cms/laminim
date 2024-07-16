@@ -10,6 +10,7 @@ class Laminim00000101000000 extends AbstractMigration
         $this
             ->table('lmm_pages', ['collation' => 'utf8_general_ci'])
             ->addColumn('created_at', 'datetime', ['null' => true, 'default' => 'CURRENT_TIMESTAMP'])
+            ->addColumn('created_by', 'integer', ['default' => 0])
             ->addColumn('name', 'json')
             ->create();
     }

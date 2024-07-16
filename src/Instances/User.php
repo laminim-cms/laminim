@@ -8,6 +8,37 @@ class User extends GeneratedUser
 {
     const COMPONENT = 'lmm-user';
 
+    public function getPreparedCustomPermissions(): array
+    {
+        $currentConfig = $this->getCustomPermissions();
+        if (!$currentConfig) $currentConfig = [];
+        $config = Permission::getAllComponentPermissions();
+        $r = [];
+
+        foreach ($config as $name => $perms) {
+            $t = [
+                'component' => $name,
+                'perms' => [],
+            ];
+
+            $existingCfg = array_filter($currentConfig, function ($cfg) use ($name) {
+                return $cfg['component'] == $name;
+            });
+
+            $existingCfg = reset($existingCfg);
+            $existingPerms = is_array($existingCfg) && is_array($existingCfg['perms']) ? $existingCfg['perms'] : [];
+
+            foreach ($perms as $perm) {
+                $p = array_key_exists($perm, $existingPerms) ? (bool)$existingPerms[$perm] : false;
+                $t['perms'][$perm] = $p;
+            }
+
+            $r[] = $t;
+        }
+
+        return $r;
+    }
+
     public function logIn(): static
     {
         if ($this->getId() === 0) return $this;
@@ -24,6 +55,7 @@ class User extends GeneratedUser
 
     public static function getLoggedId(): int
     {
+        return 1;
         return (int)$_SESSION['lmm-user-id'];
     }
 

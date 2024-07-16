@@ -40,9 +40,10 @@ class CmsHttp
         $instance = Instantiator::make($decodedType, 0);
         $r = $instance->readViewFields('create');
         $fields = $schema->getViewConfigForFields('create');
-
+        $layout = $schema->getViewLayout('create', true);
 
         return Response::ok([
+            'layout' => $layout,
             'fields' => $fields,
             'item' => $r,
             'maxPage' => 0,
@@ -56,7 +57,6 @@ class CmsHttp
         $page = (int)clearInput($params['page']);
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
-
 
         $anonymous = Instantiator::make($decodedType, 0);
         $query = $anonymous::getQueryCaller();
@@ -83,7 +83,6 @@ class CmsHttp
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
 
-
         $anonymous = Instantiator::make($decodedType, 0);
         $query = $anonymous::getQueryCaller();
         $results = $anonymous::getPage($page, $query);
@@ -106,7 +105,6 @@ class CmsHttp
     {
         $type = clearInput($params['type']);
         $decodedType = Laminim::getModuleByAlias($type);
-        $schema = Schema::get($decodedType);
 
         $data = $params['data'];
         $item = Instantiator::make($decodedType, 0);
@@ -125,7 +123,6 @@ class CmsHttp
         $type = clearInput($params['type']);
         $id = clearInput($params['id']);
         $decodedType = Laminim::getModuleByAlias($type);
-        $schema = Schema::get($decodedType);
 
         $data = $params['data'];
         $item = Instantiator::make($decodedType, $id);
@@ -149,11 +146,12 @@ class CmsHttp
         $instance = Instantiator::make($decodedType, $identifier);
         $r = $instance->readViewFields('edit');
         $fields = $schema->getViewConfigForFields('edit');
+        $layout = $schema->getViewLayout('edit', true);
 
         return Response::ok([
+            'layout' => $layout,
             'fields' => $fields,
             'item' => $r,
-            'maxPage' => 0,
             'perms' => ['create', 'update', 'read', 'drop']
         ]);
     }

@@ -5,6 +5,7 @@ namespace LaminimCMS;
 use LaminimCMS\Config\LaminimModule;
 use LaminimCMS\Http\CmsHttp;
 use LaminimCMS\Instances\Page;
+use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Instances\UserRole;
 use Lkt\Factory\Schemas\Schema;
@@ -20,12 +21,15 @@ class Laminim
     protected static array $modules = [];
     protected static array $modulesAliases = [
         'page' => Page::COMPONENT,
-        'pages' => Page::COMPONENT,
         'role' => UserRole::COMPONENT,
-        'roles' => UserRole::COMPONENT,
         'user' => User::COMPONENT,
-        'users' => User::COMPONENT,
+        'i18n' => Translation::COMPONENT,
     ];
+
+    public static function setModularAlias(string $component, string $alias): void
+    {
+        static::$modulesAliases[$alias] = $component;
+    }
 
     public static function getModuleByAlias(string $alias)
     {
