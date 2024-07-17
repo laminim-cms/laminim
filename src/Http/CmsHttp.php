@@ -2,12 +2,16 @@
 
 namespace LaminimCMS\Http;
 
+use LaminimCMS\Instances\Translation;
+use LaminimCMS\Instances\User;
 use LaminimCMS\Laminim;
 use Lkt\Factory\Instantiator\Instantiator;
 use Lkt\Factory\Schemas\Schema;
 use Lkt\Http\Response;
+use Lkt\Locale\Enums\LangCode;
 use Lkt\Locale\Locale;
 use Lkt\Templates\Template;
+use Lkt\Translations\Translations;
 use function Lkt\Tools\Parse\clearInput;
 
 class CmsHttp
@@ -31,9 +35,66 @@ class CmsHttp
             ->setContentTypeByFileExtension('css');
     }
 
+    public static function loadI18n($params = []): Response
+    {
+        $user = User::getLogged();
+        $lang = 'es';
+//        $lang = $user->getLanguage();
+//        if ($user->isAnonymous()) {
+//            $language = clearInput($params['language']);
+//            $lang = match ($language) {
+//                'es-ES' => LangCode::Spanish,
+//                default => LangCode::English
+//            };
+//        }
+
+        $query = Translation::getQueryCaller();
+        $results = Translation::getMany($query);
+
+        $r = [];
+        foreach ($results as $result) {
+            $key = [];
+            if ($result->hasStack()) $key[] = $result->getStack()?->getProperty();
+            if ($result->hasProperty()) $key[] = $result->getProperty();
+
+            $key = implode('.', $key);
+            if ($result->typeIsChoice()) {
+
+                $temp = [];
+                foreach ($result->getModularOptions() as $modularOption) {
+                    $temp[$modularOption->getName()] = $modularOption->getValue();
+                }
+
+                $r[$key] = $temp;
+            } else {
+
+                $r[$key] = $result->getValue();
+            }
+        }
+
+        function assignArrayByPath(&$arr, $path, $value, $separator='.') {
+            $keys = explode($separator, $path);
+
+            foreach ($keys as $key) {
+                $arr = &$arr[$key];
+            }
+
+            $arr = $value;
+        }
+
+        $response = [];
+        foreach ($r as $key => $value) {
+            assignArrayByPath($response, $key, $value);
+        }
+
+        return Response::ok([
+            'data' => $response
+        ]);
+    }
+
     public static function getContentConfig($params = []): Response
     {
-        $type = clearInput($params['type']);
+        $type = clearInput($params['_lmm_type']);
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
 
@@ -53,7 +114,7 @@ class CmsHttp
 
     public static function indexItems(array $params): Response
     {
-        $type = clearInput($params['type']);
+        $type = clearInput($params['_lmm_type']);
         $page = (int)clearInput($params['page']);
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
@@ -78,7 +139,7 @@ class CmsHttp
 
     public static function optionItems(array $params): Response
     {
-        $type = clearInput($params['type']);
+        $type = clearInput($params['_lmm_type']);
         $page = (int)clearInput($params['page']);
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
@@ -103,7 +164,7 @@ class CmsHttp
 
     public static function createItem($params = []): Response
     {
-        $type = clearInput($params['type']);
+        $type = clearInput($params['_lmm_type']);
         $decodedType = Laminim::getModuleByAlias($type);
 
         $data = $params['data'];
@@ -120,7 +181,7 @@ class CmsHttp
 
     public static function updateItem($params = []): Response
     {
-        $type = clearInput($params['type']);
+        $type = clearInput($params['_lmm_type']);
         $id = clearInput($params['id']);
         $decodedType = Laminim::getModuleByAlias($type);
 
@@ -138,7 +199,7 @@ class CmsHttp
 
     public static function readItem(array $params): Response
     {
-        $type = clearInput($params['type']);
+        $type = clearInput($params['_lmm_type']);
         $identifier = clearInput($params['id']);
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);

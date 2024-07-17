@@ -6,6 +6,7 @@ use LaminimCMS\Config\LaminimModule;
 use LaminimCMS\Http\CmsHttp;
 use LaminimCMS\Instances\Page;
 use LaminimCMS\Instances\Translation;
+use LaminimCMS\Instances\TranslationStack;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Instances\UserRole;
 use Lkt\Factory\Schemas\Schema;
@@ -24,6 +25,7 @@ class Laminim
         'role' => UserRole::COMPONENT,
         'user' => User::COMPONENT,
         'i18n' => Translation::COMPONENT,
+        'i18n-stack' => TranslationStack::COMPONENT,
     ];
 
     public static function setModularAlias(string $component, string $alias): void
@@ -64,17 +66,20 @@ class Laminim
         GetRoute::register('/laminim/app.css', [CmsHttp::class, 'publicAppCss']);
 
         // View routes
-        GetRoute::register('/laminim/ls/{type}', [CmsHttp::class, 'indexHTML']);
-        GetRoute::register('/laminim/new/{type}', [CmsHttp::class, 'indexHTML']);
-        GetRoute::register('/laminim/edit/{type}/{id}', [CmsHttp::class, 'indexHTML']);
+        GetRoute::register('/laminim/ls/{_lmm_type}', [CmsHttp::class, 'indexHTML']);
+        GetRoute::register('/laminim/new/{_lmm_type}', [CmsHttp::class, 'indexHTML']);
+        GetRoute::register('/laminim/edit/{_lmm_type}/{id}', [CmsHttp::class, 'indexHTML']);
 
         // CRUD routes
-        GetRoute::register('/laminim/{type}/config', [CmsHttp::class, 'getContentConfig']);
-        GetRoute::register('/laminim/{type}/index', [CmsHttp::class, 'indexItems']);
-        GetRoute::register('/laminim/{type}/options', [CmsHttp::class, 'optionItems']);
-        GetRoute::register('/laminim/{type}/{id}/read', [CmsHttp::class, 'readItem']);
-        PostRoute::register('/laminim/{type}/create', [CmsHttp::class, 'createItem']);
-        PutRoute::register('/laminim/{type}/{id}/update', [CmsHttp::class, 'updateItem']);
+        GetRoute::register('/laminim/{_lmm_type}/config', [CmsHttp::class, 'getContentConfig']);
+        GetRoute::register('/laminim/{_lmm_type}/index', [CmsHttp::class, 'indexItems']);
+        GetRoute::register('/laminim/{_lmm_type}/options', [CmsHttp::class, 'optionItems']);
+        GetRoute::register('/laminim/{_lmm_type}/{id}/read', [CmsHttp::class, 'readItem']);
+        PostRoute::register('/laminim/{_lmm_type}/create', [CmsHttp::class, 'createItem']);
+        PutRoute::register('/laminim/{_lmm_type}/{id}/update', [CmsHttp::class, 'updateItem']);
+
+        // Load routes
+        GetRoute::register('/laminim/load/i18n', [CmsHttp::class, 'loadI18n']);
 
         foreach (static::$modules as $module => $config) {
             foreach ($config['schemas'] as $schema) {
