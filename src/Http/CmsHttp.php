@@ -6,6 +6,8 @@ use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Laminim;
 use Lkt\Factory\Instantiator\Instantiator;
+use Lkt\Factory\Schemas\Fields\StringChoiceField;
+use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\Schema;
 use Lkt\Http\Response;
 use Lkt\Locale\Enums\LangCode;
@@ -115,12 +117,27 @@ class CmsHttp
     public static function indexItems(array $params): Response
     {
         $type = clearInput($params['_lmm_type']);
+        $filters = json_decode($params['_lmm_filters'], true);
+        if (!$filters) $filters = [];
         $page = (int)clearInput($params['page']);
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
 
         $anonymous = Instantiator::make($decodedType, 0);
         $query = $anonymous::getQueryCaller();
+
+
+        $filtersFieldsObjs = $schema->getViewFields('filters');
+        foreach ($filters as $filter => $value) {
+            $field = $filtersFieldsObjs[$filter];
+            if (!is_object($field)) continue;
+
+            if ($field instanceof StringChoiceField) {
+                $query->andStringEqual($field->getColumn(), clearInput($value));
+            } elseif ($field instanceof StringField) {
+                $query->andStringLike($field->getColumn(), clearInput($value));
+            }
+        }
         $results = $anonymous::getPage($page, $query);
         $maxPage = $anonymous::getAmountOfPages($query);
 
@@ -128,8 +145,12 @@ class CmsHttp
         foreach ($results as $result) $r[] = $result->readViewFields('index');
 
         $fields = $schema->getViewConfigForFields('index');
+        $layout = $schema->getViewLayout('filters', true);
+        $filtersFields = $schema->getViewConfigForFields('filters');
 
         return Response::ok([
+            'filtersLayout' => $layout,
+            'filtersFields' => $filtersFields,
             'fields' => $fields,
             'results' => $r,
             'maxPage' => $maxPage,

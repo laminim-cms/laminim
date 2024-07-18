@@ -43,6 +43,53 @@ class SeedLmmTranslationsCommand extends Command
         ;
 
         // Required i18n
+        $this->ensureKey($stack, 'btn.add', 'text', [
+            'en' => 'Add',
+            'es' => 'Agregar',
+        ]);
+        $this->ensureKey($stack, 'btn.addContent', 'text', [
+            'en' => 'Add content',
+            'es' => 'Agregar contenido',
+        ]);
+        $this->ensureKey($stack, 'btn.addBreakpoint', 'text', [
+            'en' => 'Add breakpoint',
+            'es' => 'Agregar breakpoint',
+        ]);
+        $this->ensureKey($stack, 'btn.addModularBlock', 'text', [
+            'en' => 'Add block',
+            'es' => 'Agregar bloque',
+        ]);
+        $this->ensureKey($stack, 'btn.addModularOption', 'text', [
+            'en' => 'Add option',
+            'es' => 'Agregar opción',
+        ]);
+        $this->ensureKey($stack, 'btn.edit', 'text', [
+            'en' => 'Edit',
+            'es' => 'Editar',
+        ]);
+        $this->ensureKey($stack, 'btn.save', 'text', [
+            'en' => 'Save',
+            'es' => 'Guardar',
+        ]);
+        $this->ensureKey($stack, 'btn.drop', 'text', [
+            'en' => 'Remove',
+            'es' => 'Eliminar',
+        ]);
+        $this->ensureKey($stack, 'btn.logout', 'text', [
+            'en' => 'Logout',
+            'es' => 'Cerrar sesión',
+        ]);
+        $this->ensureKey($stack, 'header.myAccount', 'text', [
+            'en' => 'My account',
+            'es' => 'Mi cuenta',
+        ]);
+        $this->ensureKey($stack, 'header.help', 'text', [
+            'en' => 'Help',
+            'es' => 'Ayuda',
+        ]);
+
+
+
         $this->ensureKey($stack, 'stack', 'text', [
             'en' => 'Stack',
             'es' => 'Stack',
@@ -71,6 +118,11 @@ class SeedLmmTranslationsCommand extends Command
         $this->ensureKey($stack, 'createdAt', 'text', [
             'en' => 'Created at',
             'es' => 'Fecha de creación',
+        ]);
+
+        $this->ensureKey($stack, 'createdBy', 'text', [
+            'en' => 'Created by',
+            'es' => 'Creado por',
         ]);
 
         $this->ensureKey($stack, 'email', 'text', [
@@ -103,9 +155,24 @@ class SeedLmmTranslationsCommand extends Command
             'es' => 'Solo para el CMS',
         ]);
 
+        $this->ensureKey($stack, 'hasCmsAccess', 'text', [
+            'en' => 'Has CMS access',
+            'es' => 'Permitir acceso al CMS',
+        ]);
+
         $this->ensureKey($stack, 'hasCustomPermissions', 'text', [
             'en' => 'Has custom permissions',
             'es' => 'Permisos personalizados',
+        ]);
+
+        $this->ensureKey($stack, 'title.breakpoints', 'text', [
+            'en' => 'Breakpoints',
+            'es' => 'Breakpoints',
+        ]);
+
+        $this->ensureKey($stack, 'title.block', 'text', [
+            'en' => 'Block',
+            'es' => 'Bloque',
         ]);
 
         $this->ensureKey($stack, 'title.index.i18n', 'text', [

@@ -44,6 +44,7 @@ return Schema::table('lmm_i18n', Translation::COMPONENT)
             ->setLabel('__:lmm.stack')
             ->configureView(FieldViewConfig::editMode('create', 'foreign-key'))
             ->configureView(FieldViewConfig::editMode('edit', 'foreign-key'))
+            ->configureView(FieldViewConfig::editMode('filters', 'foreign-key'))
     )
     ->addField(
         StringChoiceField::choice(Translation::TYPES, 'type')
@@ -51,6 +52,7 @@ return Schema::table('lmm_i18n', Translation::COMPONENT)
             ->configureView(FieldViewConfig::readMode('index', 'i18n-choice'))
             ->configureView(FieldViewConfig::editMode('create', 'i18n-choice'))
             ->configureView(FieldViewConfig::editMode('edit', 'i18n-choice'))
+            ->configureView(FieldViewConfig::editMode('filters', 'i18n-choice'))
             ->setI18nViewOptions('lmm.i18nChoices')
     )
     ->addField(
@@ -59,12 +61,14 @@ return Schema::table('lmm_i18n', Translation::COMPONENT)
             ->configureView(FieldViewConfig::readMode('index'))
             ->configureView(FieldViewConfig::editMode('create', 'text'))
             ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::editMode('filters', 'text'))
     )
     ->addField(
         StringField::define('value')
             ->setIsI18nJson()
             ->setLabel('__:lmm.value')
             ->configureView(FieldViewConfig::readMode('index', 'text'))
+            ->configureView(FieldViewConfig::editMode('filters', 'text'))
     )
     ->addField(
         StringField::define('valueEn', 'value')
@@ -121,4 +125,11 @@ return Schema::table('lmm_i18n', Translation::COMPONENT)
             ])
         ,
         ['edit']
+    )
+    ->setLayout(
+        GridLayout::define('filters', 1, [
+                GridLayout::define('main-data', 3, ['stack']),
+                GridLayout::define('main-data', 3, ['property', 'type', 'value']),
+            ]
+        )
     );

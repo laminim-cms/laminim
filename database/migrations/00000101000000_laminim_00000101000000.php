@@ -12,6 +12,7 @@ class Laminim00000101000000 extends AbstractMigration
             ->addColumn('created_at', 'datetime', ['null' => true, 'default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('created_by', 'integer', ['default' => 0])
             ->addColumn('name', 'json')
+            ->addColumn('status', 'string', ['limit' => 20, 'default' => ''])
             ->create();
     }
 }
