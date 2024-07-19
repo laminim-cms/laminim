@@ -57,6 +57,7 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
     ->addField(
         FileField::define('src')
             ->setLabel('__:lmm.src')
+            ->setPublicPath('/laminim/open/:component')
 //            ->setStorePath(__DIR__ . '/../../uploads')
             ->configureView(FieldViewConfig::readMode('index', 'file'))
             ->configureView(FieldViewConfig::editMode('create', 'file'))
