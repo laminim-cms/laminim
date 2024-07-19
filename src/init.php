@@ -19,6 +19,7 @@ Schema::add(require_once "Schemas/laminim-user-roles.php");
 Schema::add(require_once "Schemas/laminim-users.php");
 Schema::add(require_once "Schemas/laminim-translations.php");
 Schema::add(require_once "Schemas/laminim-translations-stacks.php");
+Schema::add(require_once "Schemas/laminim-multimedia.php");
 
 Permission::enableComponentPermission(Page::COMPONENT, 'create');
 Permission::enableComponentPermission(Page::COMPONENT, 'read');

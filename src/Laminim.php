@@ -4,6 +4,7 @@ namespace LaminimCMS;
 
 use LaminimCMS\Config\LaminimModule;
 use LaminimCMS\Http\CmsHttp;
+use LaminimCMS\Instances\MultimediaItem;
 use LaminimCMS\Instances\Page;
 use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\TranslationStack;
@@ -26,6 +27,7 @@ class Laminim
         'user' => User::COMPONENT,
         'i18n' => Translation::COMPONENT,
         'i18n-stack' => TranslationStack::COMPONENT,
+        'multimedia' => MultimediaItem::COMPONENT,
     ];
 
     public static function setModularAlias(string $component, string $alias): void
