@@ -2,10 +2,12 @@
 
 namespace LaminimCMS\Http;
 
+use chillerlan\Filereader\File;
 use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Laminim;
 use Lkt\Factory\Instantiator\Instantiator;
+use Lkt\Factory\Schemas\Fields\FileField;
 use Lkt\Factory\Schemas\Fields\StringChoiceField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\Schema;
@@ -236,5 +238,39 @@ class CmsHttp
             'item' => $r,
             'perms' => ['create', 'update', 'read', 'drop']
         ]);
+    }
+    public static function openItemField(array $params = []): Response
+    {
+        $type = clearInput($params['_lmm_type']);
+        $fieldName = clearInput($params['field']);
+        $identifier = clearInput($params['id']);
+        $decodedType = Laminim::getModuleByAlias($type);
+        $schema = Schema::get($decodedType);
+        $field = $schema->getField($fieldName);
+
+        $instance = Instantiator::make($decodedType, $identifier);
+
+        if (!$field instanceof FileField) {
+            return Response::notFound();
+        }
+
+        $path = $field->getStorePath();
+
+        /** @var File $file */
+        $file = $instance->{$field->getGetterForPrimitiveValue()}();
+        if (!$file instanceof File) return Response::notFound();
+        $path = $file->path;
+        $content = $file->content();
+
+        if (!$content) return Response::notFound();
+
+        $content = file_get_contents($path);
+
+        $filename = basename($file->name);
+        $extension = strtolower(substr(strrchr($filename, '.'), 1));
+
+        return Response::ok($content)
+            ->setContentTypeByFileExtension($extension)
+            ->setLastModifiedHeader(filemtime($path));
     }
 }

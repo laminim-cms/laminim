@@ -71,6 +71,7 @@ class Laminim
         GetRoute::register('/laminim/ls/{_lmm_type}', [CmsHttp::class, 'indexHTML']);
         GetRoute::register('/laminim/new/{_lmm_type}', [CmsHttp::class, 'indexHTML']);
         GetRoute::register('/laminim/edit/{_lmm_type}/{id}', [CmsHttp::class, 'indexHTML']);
+        GetRoute::register('/laminim/open/{_lmm_type}/{field}/{id}', [CmsHttp::class, 'openItemField']);
 
         // CRUD routes
         GetRoute::register('/laminim/{_lmm_type}/config', [CmsHttp::class, 'getContentConfig']);
