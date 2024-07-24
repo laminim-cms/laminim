@@ -2,7 +2,6 @@
 
 namespace LaminimCMS;
 
-use LaminimCMS\Config\LaminimModule;
 use LaminimCMS\Http\CmsHttp;
 use LaminimCMS\Instances\MultimediaItem;
 use LaminimCMS\Instances\Page;
@@ -51,11 +50,6 @@ class Laminim
         static::$pathToMainStyle = $path;
     }
 
-    public static function setModule(LaminimModule $module)
-    {
-
-    }
-
     public static function getAvailableModularTypes(): array
     {
         return array_keys(static::$modules);
@@ -83,6 +77,8 @@ class Laminim
 
         // Load routes
         GetRoute::register('/laminim/load/i18n', [CmsHttp::class, 'loadI18n']);
+        GetRoute::register('/laminim/load/modules', [CmsHttp::class, 'loadModules']);
+        GetRoute::register('/laminim/load/menu', [CmsHttp::class, 'loadMenu']);
 
         foreach (static::$modules as $module => $config) {
             foreach ($config['schemas'] as $schema) {
@@ -111,16 +107,5 @@ class Laminim
 
         // Wildcard at the end (catch all)
         GetRoute::register('/laminim[/{path}]', [CmsHttp::class, 'indexHTML']);
-    }
-
-    public static function setupPagesModule()
-    {
-        static::$modules['lmm-pages'] = [
-            'schemas' => [
-                require_once "Schemas/laminim-pages.php",
-            ],
-//            'routes' => [
-//            ]
-        ];
     }
 }

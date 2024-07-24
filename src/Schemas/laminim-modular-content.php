@@ -27,4 +27,5 @@ return Schema::table('lmm_modular_content', ModularContent::COMPONENT)
     ->addField(DateTimeField::define('createdAt', 'created_at')
         ->setCurrentTimeStampAsDefaultValue())
     ->addField(AssocJSONField::define('breakpoints'))
+    ->addField(AssocJSONField::define('config'))
     ;

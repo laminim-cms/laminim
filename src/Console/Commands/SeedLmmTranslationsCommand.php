@@ -43,214 +43,254 @@ class SeedLmmTranslationsCommand extends Command
         ;
 
         // Required i18n
-        $this->ensureKey($stack, 'btn.add', 'text', [
+        Translation::ensureKey($stack, 'btn.add', 'text', [
             'en' => 'Add',
             'es' => 'Agregar',
         ]);
-        $this->ensureKey($stack, 'btn.addContent', 'text', [
+        Translation::ensureKey($stack, 'btn.addContent', 'text', [
             'en' => 'Add content',
             'es' => 'Agregar contenido',
         ]);
-        $this->ensureKey($stack, 'btn.addBreakpoint', 'text', [
+        Translation::ensureKey($stack, 'btn.addBreakpoint', 'text', [
             'en' => 'Add breakpoint',
             'es' => 'Agregar breakpoint',
         ]);
-        $this->ensureKey($stack, 'btn.addModularBlock', 'text', [
+        Translation::ensureKey($stack, 'btn.addModularBlock', 'text', [
             'en' => 'Add block',
             'es' => 'Agregar bloque',
         ]);
-        $this->ensureKey($stack, 'btn.addModularOption', 'text', [
+        Translation::ensureKey($stack, 'btn.addModularOption', 'text', [
             'en' => 'Add option',
             'es' => 'Agregar opción',
         ]);
-        $this->ensureKey($stack, 'btn.edit', 'text', [
+        Translation::ensureKey($stack, 'btn.edit', 'text', [
             'en' => 'Edit',
             'es' => 'Editar',
         ]);
-        $this->ensureKey($stack, 'btn.save', 'text', [
+        Translation::ensureKey($stack, 'btn.save', 'text', [
             'en' => 'Save',
             'es' => 'Guardar',
         ]);
-        $this->ensureKey($stack, 'btn.drop', 'text', [
+        Translation::ensureKey($stack, 'btn.drop', 'text', [
             'en' => 'Remove',
             'es' => 'Eliminar',
         ]);
-        $this->ensureKey($stack, 'btn.logout', 'text', [
+        Translation::ensureKey($stack, 'btn.logout', 'text', [
             'en' => 'Logout',
             'es' => 'Cerrar sesión',
         ]);
-        $this->ensureKey($stack, 'header.myAccount', 'text', [
+        Translation::ensureKey($stack, 'header.myAccount', 'text', [
             'en' => 'My account',
             'es' => 'Mi cuenta',
         ]);
-        $this->ensureKey($stack, 'header.help', 'text', [
+        Translation::ensureKey($stack, 'header.help', 'text', [
             'en' => 'Help',
             'es' => 'Ayuda',
         ]);
 
 
 
-        $this->ensureKey($stack, 'stack', 'text', [
+        Translation::ensureKey($stack, 'stack', 'text', [
             'en' => 'Stack',
             'es' => 'Stack',
         ]);
 
-        $this->ensureKey($stack, 'type', 'text', [
+        Translation::ensureKey($stack, 'type', 'text', [
             'en' => 'Type',
             'es' => 'Tipo',
         ]);
 
-        $this->ensureKey($stack, 'name', 'text', [
+        Translation::ensureKey($stack, 'name', 'text', [
             'en' => 'Name',
             'es' => 'Nombre',
         ]);
 
-        $this->ensureKey($stack, 'lastname', 'text', [
+        Translation::ensureKey($stack, 'lastname', 'text', [
             'en' => 'Lastname',
             'es' => 'Apellidos',
         ]);
 
-        $this->ensureKey($stack, 'property', 'text', [
+        Translation::ensureKey($stack, 'property', 'text', [
             'en' => 'Property',
             'es' => 'Propiedad',
         ]);
 
-        $this->ensureKey($stack, 'createdAt', 'text', [
+        Translation::ensureKey($stack, 'createdAt', 'text', [
             'en' => 'Created at',
             'es' => 'Fecha de creación',
         ]);
 
-        $this->ensureKey($stack, 'createdBy', 'text', [
+        Translation::ensureKey($stack, 'createdBy', 'text', [
             'en' => 'Created by',
             'es' => 'Creado por',
         ]);
 
-        $this->ensureKey($stack, 'email', 'text', [
+        Translation::ensureKey($stack, 'email', 'text', [
             'en' => 'Email',
             'es' => 'Email',
         ]);
 
-        $this->ensureKey($stack, 'value', 'text', [
+        Translation::ensureKey($stack, 'value', 'text', [
             'en' => 'Value',
             'es' => 'Valor',
         ]);
 
-        $this->ensureKey($stack, 'valueEn', 'text', [
+        Translation::ensureKey($stack, 'valueEn', 'text', [
             'en' => 'English',
             'es' => 'Inglés',
         ]);
 
-        $this->ensureKey($stack, 'valueEs', 'text', [
+        Translation::ensureKey($stack, 'valueEs', 'text', [
             'en' => 'Spanish',
             'es' => 'Español',
         ]);
 
-        $this->ensureKey($stack, 'requiredAdminPerms', 'text', [
+        Translation::ensureKey($stack, 'requiredAdminPerms', 'text', [
             'en' => 'Required admin permissions',
             'es' => 'Requiere permisos de administrador',
         ]);
 
-        $this->ensureKey($stack, 'onlyForCms', 'text', [
+        Translation::ensureKey($stack, 'onlyForCms', 'text', [
             'en' => 'Only for CMS',
             'es' => 'Solo para el CMS',
         ]);
 
-        $this->ensureKey($stack, 'hasCmsAccess', 'text', [
+        Translation::ensureKey($stack, 'hasCmsAccess', 'text', [
             'en' => 'Has CMS access',
             'es' => 'Permitir acceso al CMS',
         ]);
 
-        $this->ensureKey($stack, 'hasCustomPermissions', 'text', [
+        Translation::ensureKey($stack, 'hasCustomPermissions', 'text', [
             'en' => 'Has custom permissions',
             'es' => 'Permisos personalizados',
         ]);
 
-        $this->ensureKey($stack, 'title.breakpoints', 'text', [
+        Translation::ensureKey($stack, 'items', 'text', [
+            'en' => 'Items',
+            'es' => 'Elementos',
+        ]);
+
+        Translation::ensureKey($stack, 'visibility', 'text', [
+            'en' => 'Visibility',
+            'es' => 'Visibilidad',
+        ]);
+
+        Translation::ensureKey($stack, 'title.breakpoints', 'text', [
             'en' => 'Breakpoints',
             'es' => 'Breakpoints',
         ]);
 
-        $this->ensureKey($stack, 'title.block', 'text', [
+        Translation::ensureKey($stack, 'title.block', 'text', [
             'en' => 'Block',
             'es' => 'Bloque',
         ]);
 
-        $this->ensureKey($stack, 'title.index.i18n', 'text', [
+        Translation::ensureKey($stack, 'title.index.i18n', 'text', [
             'en' => 'Translations',
             'es' => 'Traducciones',
         ]);
 
-        $this->ensureKey($stack, 'title.edit.i18n', 'text', [
+        Translation::ensureKey($stack, 'title.edit.i18n', 'text', [
             'en' => 'Edit Translation',
             'es' => 'Editar Traducción',
         ]);
 
-        $this->ensureKey($stack, 'title.create.i18n', 'text', [
+        Translation::ensureKey($stack, 'title.create.i18n', 'text', [
             'en' => 'Create Translation',
             'es' => 'Crear Traducción',
         ]);
 
-        $this->ensureKey($stack, 'title.index.i18n-stack', 'text', [
+        Translation::ensureKey($stack, 'title.index.i18n-stack', 'text', [
             'en' => 'Translations Stack',
             'es' => 'Grupos de Traducciones',
         ]);
 
-        $this->ensureKey($stack, 'title.edit.i18n-stack', 'text', [
+        Translation::ensureKey($stack, 'title.edit.i18n-stack', 'text', [
             'en' => 'Edit Translation Stack',
             'es' => 'Editar Grupo de Traducciones',
         ]);
 
-        $this->ensureKey($stack, 'title.create.i18n-stack', 'text', [
+        Translation::ensureKey($stack, 'title.create.i18n-stack', 'text', [
             'en' => 'Create Translation Stack',
             'es' => 'Crear Grupo de Traducciones',
         ]);
 
-        $this->ensureKey($stack, 'title.index.user', 'text', [
+        Translation::ensureKey($stack, 'title.index.user', 'text', [
             'en' => 'Users',
             'es' => 'Usuarios',
         ]);
 
-        $this->ensureKey($stack, 'title.edit.user', 'text', [
+        Translation::ensureKey($stack, 'title.edit.user', 'text', [
             'en' => 'Edit User',
             'es' => 'Editar Usuario',
         ]);
 
-        $this->ensureKey($stack, 'title.create.user', 'text', [
+        Translation::ensureKey($stack, 'title.create.user', 'text', [
             'en' => 'Create User',
             'es' => 'Crear Usuario',
         ]);
 
-        $this->ensureKey($stack, 'title.index.role', 'text', [
+        Translation::ensureKey($stack, 'title.index.role', 'text', [
             'en' => 'Roles',
             'es' => 'Roles',
         ]);
 
-        $this->ensureKey($stack, 'title.edit.role', 'text', [
+        Translation::ensureKey($stack, 'title.edit.role', 'text', [
             'en' => 'Edit Role',
             'es' => 'Editar Rol',
         ]);
 
-        $this->ensureKey($stack, 'title.create.role', 'text', [
+        Translation::ensureKey($stack, 'title.create.role', 'text', [
             'en' => 'Create Role',
             'es' => 'Crear Rol',
         ]);
 
-        $this->ensureKey($stack, 'title.index.page', 'text', [
+        Translation::ensureKey($stack, 'title.index.page', 'text', [
             'en' => 'Pages',
             'es' => 'Páginas',
         ]);
 
-        $this->ensureKey($stack, 'title.edit.page', 'text', [
+        Translation::ensureKey($stack, 'title.edit.page', 'text', [
             'en' => 'Edit Page',
             'es' => 'Editar Página',
         ]);
 
-        $this->ensureKey($stack, 'title.create.page', 'text', [
+        Translation::ensureKey($stack, 'title.create.page', 'text', [
             'en' => 'Create Page',
             'es' => 'Crear Página',
         ]);
 
-        $this->ensureChoice($stack, 'i18nChoices', [
+        Translation::ensureKey($stack, 'menu.page', 'text', [
+            'en' => 'Pages',
+            'es' => 'Páginas',
+        ]);
+
+        Translation::ensureKey($stack, 'menu.user', 'text', [
+            'en' => 'Users',
+            'es' => 'Usuarios',
+        ]);
+
+        Translation::ensureKey($stack, 'menu.role', 'text', [
+            'en' => 'Roles',
+            'es' => 'Roles',
+        ]);
+
+        Translation::ensureKey($stack, 'menu.i18n', 'text', [
+            'en' => 'Translations',
+            'es' => 'Traducciones',
+        ]);
+
+        Translation::ensureKey($stack, 'menu.i18nStack', 'text', [
+            'en' => 'Stacks',
+            'es' => 'Grupos',
+        ]);
+
+        Translation::ensureKey($stack, 'menu.multimedia', 'text', [
+            'en' => 'Multimedia',
+            'es' => 'Multimedia',
+        ]);
+
+        Translation::ensureChoice($stack, 'i18nChoices', [
             ['name' => Translation::TYPE_CHOICE, 'valueEn' => 'Choice', 'valueEs' => 'Elección'],
             ['name' => Translation::TYPE_EDITOR, 'valueEn' => 'Editor', 'valueEs' => 'Editor'],
             ['name' => Translation::TYPE_TEXT, 'valueEn' => 'Text', 'valueEs' => 'Texto'],
@@ -259,56 +299,5 @@ class SeedLmmTranslationsCommand extends Command
 
 
         return 1;
-    }
-
-    private function ensureKey(TranslationStack $stack, string $key, string $type, array $values)
-    {
-        $query = Translation::getQueryCaller()
-            ->andPropertyEqual($key)
-            ->andStackEqual($stack->getId());
-
-        $item = Translation::getOne($query);
-        if (!$item) $item = Translation::getInstance();
-
-        $item
-            ->setStackId($stack->getId())
-            ->setProperty($key)
-            ->setType($type)
-            ->setValueEn($values['en'])
-            ->setValueEs($values['es'])
-            ->save()
-        ;
-    }
-
-    private function ensureChoice(TranslationStack $stack, string $key, array $values)
-    {
-        $query = Translation::getQueryCaller()
-            ->andPropertyEqual($key)
-            ->andStackEqual($stack->getId());
-
-        $item = Translation::getOne($query);
-        if (!$item) $item = Translation::getInstance();
-
-        if ($item->getId() > 0){
-            foreach ($values as &$value) {
-                $opt = ModularOption::getOne(
-                    ModularOption::getQueryCaller()
-                        ->andItemIdEqual($item->getId())
-                        ->andNameEqual($value['name'])
-                );
-
-                if (is_object($opt)) $value['id'] = $opt->getId();
-            }
-        }
-
-        $item
-            ->setStackId($stack->getId())
-            ->setProperty($key)
-            ->setModularOptionsWithData($values)
-            ->setTypeChoice()
-            ->setValueEn('')
-            ->setValueEs('')
-            ->save()
-        ;
     }
 }

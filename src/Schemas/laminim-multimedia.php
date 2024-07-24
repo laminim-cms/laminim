@@ -4,6 +4,7 @@ namespace LaminimCMS\Schemas;
 
 use LaminimCMS\Instances\MultimediaItem;
 use LaminimCMS\Instances\User;
+use LaminimCMS\Laminim;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\FileField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
@@ -58,7 +59,7 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
         FileField::define('src')
             ->setLabel('__:lmm.src')
             ->setPublicPath('/laminim/open/:component/:field/:id')
-            ->setStorePath(__DIR__ . '/../../uploads')
+            ->setStorePath(APP_DIR . '/private/multimedia')
             ->configureView(FieldViewConfig::readMode('index', 'file'))
             ->configureView(FieldViewConfig::editMode('create', 'file'))
             ->configureView(FieldViewConfig::editMode('edit', 'file'))
@@ -77,14 +78,14 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
             ->setLabel('__:lmm.type')
             ->configureView(FieldViewConfig::readMode('index', 'text'))
             ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::readMode('edit', 'text'))
     )
     ->addField(
         StringField::define('mime')
             ->setLabel('__:lmm.mime')
             ->configureView(FieldViewConfig::readMode('index', 'text'))
-            ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::hideMode('create', 'text'))
+            ->configureView(FieldViewConfig::readMode('edit', 'text'))
     )
     ->setLayout(
         GridLayout::define('create', 1, [

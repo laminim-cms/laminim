@@ -2,34 +2,22 @@
 
 namespace LaminimCMS\Config;
 
+use Lkt\Factory\Schemas\Schema;
+
 class LaminimModule
 {
     protected static $MODS = [];
 
     protected string $name = '';
-    protected array $views = [];
+    protected string $title = '';
 
-    public static function register(string $name): static
-    {
-        $r = new static();
-        $r->name = $name;
-        static::$MODS[$r->name] = $r;
-        return static::$MODS[$r->name];
-    }
+    protected string $mode = '';
 
-    public function setView(LaminimView $view): static
-    {
-        $this->views[$view->getName()] = $view;
-        return $this;
-    }
+    protected Schema|null $schema = null;
 
-    /**
-     * @return LaminimView[]
-     */
-    public function getViews(): array
-    {
-        return $this->views;
-    }
+    const MODE_AUTO = 'auto';
+    const MODE_ROUTE = 'route';
+    const MODE_LAYOUT = 'layout';
 
     /**
      * @return static[]
@@ -38,9 +26,58 @@ class LaminimModule
     {
         return static::$MODS;
     }
+    public static function getMappedModules(): array
+    {
+        return array_map(function (self $module) {return $module->read();}, array_values(static::$MODS));
+    }
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public static function defineAuto(string $name, string $title): static
+    {
+        $r = new static();
+        $r->name = $name;
+        $r->title = $title;
+        $r->mode = static::MODE_AUTO;
+        static::$MODS[$r->name] = $r;
+        return static::$MODS[$r->name];
+    }
+
+    public static function defineRoute(string $name, string $title): static
+    {
+        $r = new static();
+        $r->name = $name;
+        $r->title = $title;
+        $r->mode = static::MODE_ROUTE;
+        static::$MODS[$r->name] = $r;
+        return static::$MODS[$r->name];
+    }
+
+    public static function defineLayout(string $name, string $title, Schema $schema): static
+    {
+        $r = new static();
+        $r->name = $name;
+        $r->title = $title;
+        $r->mode = static::MODE_ROUTE;
+        $r->schema = $schema;
+        static::$MODS[$r->name] = $r;
+        return static::$MODS[$r->name];
+    }
+
+    public function read(): array
+    {
+        return [
+            'value' => $this->name,
+            'label' => $this->title,
+            'mode' => $this->mode,
+        ];
+    }
+
+    public static function getModule(string $module)
+    {
+        return static::$MODS[$module];
     }
 }

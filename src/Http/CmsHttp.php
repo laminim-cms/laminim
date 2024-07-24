@@ -3,6 +3,8 @@
 namespace LaminimCMS\Http;
 
 use chillerlan\Filereader\File;
+use LaminimCMS\Config\LaminimMenuEntry;
+use LaminimCMS\Config\LaminimModule;
 use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Laminim;
@@ -93,6 +95,20 @@ class CmsHttp
 
         return Response::ok([
             'data' => $response
+        ]);
+    }
+
+    public static function loadModules($params = []): Response
+    {
+        return Response::ok([
+            'data' => LaminimModule::getMappedModules()
+        ]);
+    }
+
+    public static function loadMenu($params = []): Response
+    {
+        return Response::ok([
+            'data' => LaminimMenuEntry::getMappedEntries()
         ]);
     }
 
@@ -239,6 +255,7 @@ class CmsHttp
             'perms' => ['create', 'update', 'read', 'drop']
         ]);
     }
+
     public static function openItemField(array $params = []): Response
     {
         $type = clearInput($params['_lmm_type']);

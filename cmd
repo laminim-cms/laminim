@@ -15,7 +15,6 @@ session_start();
 
 require __DIR__ .'/vendor/autoload.php';
 
-\LaminimCMS\Laminim::setupPagesModule();
 \LaminimCMS\Laminim::setup();
 
 \Lkt\Commander\Commander::run();

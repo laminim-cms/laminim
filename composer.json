@@ -2,7 +2,7 @@
   "name": "laminim-cms/laminim",
   "description": "Laminim CMS",
   "type": "library",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "require": {
     "php": ">=8.1.0",
     "ext-json": "*",
