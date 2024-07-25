@@ -3,6 +3,7 @@
 namespace LaminimCMS\Console\Commands;
 
 use LaminimCMS\Instances\ModularOption;
+use LaminimCMS\Instances\MultimediaItem;
 use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\TranslationStack;
 use Symfony\Component\Console\Command\Command;
@@ -295,6 +296,16 @@ class SeedLmmTranslationsCommand extends Command
             ['name' => Translation::TYPE_EDITOR, 'valueEn' => 'Editor', 'valueEs' => 'Editor'],
             ['name' => Translation::TYPE_TEXT, 'valueEn' => 'Text', 'valueEs' => 'Texto'],
             ['name' => Translation::TYPE_TEXTAREA, 'valueEn' => 'Textarea', 'valueEs' => 'Área de texto'],
+        ]);
+
+        Translation::ensureChoice($stack, 'multimediaTypeChoices', [
+            ['name' => MultimediaItem::TYPE_IMAGE, 'valueEn' => 'Image', 'valueEs' => 'Imagen'],
+            ['name' => MultimediaItem::TYPE_VIDEO, 'valueEn' => 'Video', 'valueEs' => 'Vídeo'],
+            ['name' => MultimediaItem::TYPE_FILE, 'valueEn' => 'File', 'valueEs' => 'Archivo'],
+            ['name' => MultimediaItem::TYPE_OFFICE, 'valueEn' => 'Office', 'valueEs' => 'Office'],
+            ['name' => MultimediaItem::TYPE_YOUTUBE, 'valueEn' => 'Youtube', 'valueEs' => 'Youtube'],
+            ['name' => MultimediaItem::TYPE_VIMEO, 'valueEn' => 'Vimeo', 'valueEs' => 'Vimeo'],
+            ['name' => MultimediaItem::TYPE_URL, 'valueEn' => 'URL', 'valueEs' => 'URL'],
         ]);
 
 

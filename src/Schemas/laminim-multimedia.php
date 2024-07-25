@@ -9,6 +9,7 @@ use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\FileField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
 use Lkt\Factory\Schemas\Fields\IdField;
+use Lkt\Factory\Schemas\Fields\StringChoiceField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
@@ -69,21 +70,21 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
             ->setLabel('__:lmm.posterSrc')
             ->setPublicPath('/laminim/open/:component/:field/:id')
             ->setStorePath(__DIR__ . '/../../uploads')
-            ->configureView(FieldViewConfig::readMode('index', 'file'))
-            ->configureView(FieldViewConfig::editMode('create', 'file'))
-            ->configureView(FieldViewConfig::editMode('edit', 'file'))
+            ->configureView(FieldViewConfig::dataMode('create', 'file'))
+            ->configureView(FieldViewConfig::dataMode('edit', 'file'))
     )
     ->addField(
-        StringField::define('type')
+        StringChoiceField::choice(MultimediaItem::TYPES, 'type')
+            ->setDefaultValue(MultimediaItem::TYPE_IMAGE)
             ->setLabel('__:lmm.type')
-            ->configureView(FieldViewConfig::readMode('index', 'text'))
-            ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::readMode('edit', 'text'))
+            ->configureView(FieldViewConfig::readMode('index', 'i18n-choice'))
+            ->configureView(FieldViewConfig::editMode('create', 'i18n-choice'))
+            ->configureView(FieldViewConfig::editMode('edit', 'i18n-choice'))
+            ->setI18nViewOptions('lmm.multimediaTypeChoices')
     )
     ->addField(
         StringField::define('mime')
             ->setLabel('__:lmm.mime')
-            ->configureView(FieldViewConfig::readMode('index', 'text'))
             ->configureView(FieldViewConfig::hideMode('create', 'text'))
             ->configureView(FieldViewConfig::readMode('edit', 'text'))
     )
@@ -94,13 +95,20 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
                     GridLayout::define('main-data', 2, ['src', 'posterSrc']),
                 ]),
                 'mime',
-                'createdAt',
-                'createdBy',
+                GridLayout::define('main-data', 2, [
+                    'createdAt',
+                    'createdBy',
+                ]),
             ]
-        )->setConditionalTypes('id', 0, [
+        )->setConditionalModes('id', 0, [
             'createdAt' => 'data',
             'createdBy' => 'data',
-        ]),
+        ])
+            ->setConditionalModes('type', MultimediaItem::TYPE_VIDEO, ['posterSrc' => 'edit'])
+            ->setConditionalModes('type', MultimediaItem::TYPE_VIMEO, ['posterSrc' => 'edit'])
+            ->setConditionalModes('type', MultimediaItem::TYPE_YOUTUBE, ['posterSrc' => 'edit'])
+            ->setConditionalModes('type', MultimediaItem::TYPE_URL, ['posterSrc' => 'edit'])
+        ,
         ['edit']
     )
     ;
