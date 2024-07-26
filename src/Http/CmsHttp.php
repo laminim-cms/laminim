@@ -9,7 +9,10 @@ use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Laminim;
 use Lkt\Factory\Instantiator\Instantiator;
+use Lkt\Factory\Schemas\Fields\AbstractField;
 use Lkt\Factory\Schemas\Fields\FileField;
+use Lkt\Factory\Schemas\Fields\ForeignKeyField;
+use Lkt\Factory\Schemas\Fields\RelatedField;
 use Lkt\Factory\Schemas\Fields\StringChoiceField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\Schema;
@@ -115,10 +118,27 @@ class CmsHttp
     public static function getContentConfig($params = []): Response
     {
         $type = clearInput($params['_lmm_type']);
+        $parentId = (int)clearInput($params['_lmm_parent_id']);
+        $parentComponent = clearInput($params['_lmm_parent_component']);
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
 
         $instance = Instantiator::make($decodedType, 0);
+
+        if ($parentId > 0 && $parentComponent !== '') {
+            $decodedParentComponent = Laminim::getModuleByAlias($parentComponent);
+            $foreignField = array_filter($schema->getFields(), function (AbstractField $field) use ($decodedParentComponent) {
+                return $field instanceof ForeignKeyField
+                    && $field->getComponent() === $decodedParentComponent;
+            });
+
+            $foreignField = reset($foreignField);
+
+            if ($foreignField) {
+                $setter = $foreignField->getSetterForPrimitiveValue();
+                $instance->$setter($parentId);
+            }
+        }
         $r = $instance->readViewFields('create');
         $fields = $schema->getViewConfigForFields('create');
         $layout = $schema->getViewLayout('create', true);
@@ -156,6 +176,62 @@ class CmsHttp
                 $query->andStringLike($field->getColumn(), clearInput($value));
             }
         }
+        $results = $anonymous::getPage($page, $query);
+        $maxPage = $anonymous::getAmountOfPages($query);
+
+        $r = [];
+        foreach ($results as $result) $r[] = $result->readViewFields('index');
+
+        $fields = $schema->getViewConfigForFields('index');
+        $layout = $schema->getViewLayout('filters', true);
+        $filtersFields = $schema->getViewConfigForFields('filters');
+
+        return Response::ok([
+            'filtersLayout' => $layout,
+            'filtersFields' => $filtersFields,
+            'fields' => $fields,
+            'results' => $r,
+            'maxPage' => $maxPage,
+            'perms' => ['create', 'update', 'read', 'drop']
+        ]);
+    }
+
+    public static function relatedItems(array $params): Response
+    {
+        $type = clearInput($params['_lmm_type']);
+        $id = (int)clearInput($params['_lmm_id']);
+        $fieldName = clearInput($params['_lmm_field']);
+
+        $filters = json_decode($params['_lmm_filters'], true);
+        if (!$filters) $filters = [];
+        $page = (int)clearInput($params['page']);
+        $decodedType = Laminim::getModuleByAlias($type);
+        $fromSchema = Schema::get($decodedType);
+
+        $relatedField = $fromSchema->getRelatedField($fieldName);
+        if (!$relatedField instanceof RelatedField) return Response::notFound();
+
+        $schema = Schema::get($relatedField->getComponent());
+
+        $fromAnonymous = Instantiator::make($decodedType, $id);
+        $getter = $relatedField->getQueryBuilderGetter();
+        $query = $fromAnonymous->{$getter}();
+
+
+
+        $filtersFieldsObjs = $schema->getViewFields('filters');
+        foreach ($filters as $filter => $value) {
+            $field = $filtersFieldsObjs[$filter];
+            if (!is_object($field)) continue;
+
+            if ($field instanceof StringChoiceField) {
+                $query->andStringEqual($field->getColumn(), clearInput($value));
+            } elseif ($field instanceof StringField) {
+                $query->andStringLike($field->getColumn(), clearInput($value));
+            }
+        }
+
+        $anonymous = Instantiator::make($relatedField->getComponent(), 0);
         $results = $anonymous::getPage($page, $query);
         $maxPage = $anonymous::getAmountOfPages($query);
 

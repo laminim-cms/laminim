@@ -308,7 +308,36 @@ class SeedLmmTranslationsCommand extends Command
             ['name' => MultimediaItem::TYPE_URL, 'valueEn' => 'URL', 'valueEs' => 'URL'],
         ]);
 
+        $this->seedComponents();
 
         return 1;
+    }
+
+    private function seedComponents()
+    {
+        // Stack:
+        $stackQuery = TranslationStack::getQueryCaller()
+            ->andPropertyEqual('components');
+
+        $stack = TranslationStack::getOne($stackQuery);
+        if (!$stack) $stack = TranslationStack::getInstance();
+
+        $stack
+            ->setName('Laminim CMS Components i18n')
+            ->setProperty('components')
+            ->setOnlyForCms(true)
+            ->setRequiredAdminPerms(true)
+            ->save()
+        ;
+
+        Translation::ensureKey($stack, 'page.many', 'text', [
+            'en' => 'Pages',
+            'es' => 'Páginas',
+        ]);
+
+        Translation::ensureKey($stack, 'page.one', 'text', [
+            'en' => 'Page',
+            'es' => 'Página',
+        ]);
     }
 }
