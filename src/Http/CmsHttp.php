@@ -12,6 +12,7 @@ use Lkt\Factory\Instantiator\Instantiator;
 use Lkt\Factory\Schemas\Fields\AbstractField;
 use Lkt\Factory\Schemas\Fields\FileField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
+use Lkt\Factory\Schemas\Fields\PivotField;
 use Lkt\Factory\Schemas\Fields\RelatedField;
 use Lkt\Factory\Schemas\Fields\StringChoiceField;
 use Lkt\Factory\Schemas\Fields\StringField;
@@ -252,6 +253,63 @@ class CmsHttp
         ]);
     }
 
+    public static function pivotItems(array $params): Response
+    {
+        $type = clearInput($params['_lmm_type']);
+        $id = (int)clearInput($params['_lmm_id']);
+        $fieldName = clearInput($params['_lmm_field']);
+
+        $filters = json_decode($params['_lmm_filters'], true);
+        if (!$filters) $filters = [];
+        $page = (int)clearInput($params['page']);
+        $decodedType = Laminim::getModuleByAlias($type);
+        $fromSchema = Schema::get($decodedType);
+
+        $relatedField = $fromSchema->getPivotField($fieldName);
+        if (!$relatedField instanceof PivotField) return Response::notFound();
+
+        $schema = Schema::get($relatedField->getComponent());
+
+        $fromAnonymous = Instantiator::make($decodedType, $id);
+//        $getter = $relatedField->getQueryBuilderGetter();
+//        $query = $fromAnonymous->{$getter}();
+        $query = $fromAnonymous->_getPivotQueryBuilder($fieldName);
+
+
+
+        $filtersFieldsObjs = $schema->getViewFields('filters');
+        foreach ($filters as $filter => $value) {
+            $field = $filtersFieldsObjs[$filter];
+            if (!is_object($field)) continue;
+
+            if ($field instanceof StringChoiceField) {
+                $query->andStringEqual($field->getColumn(), clearInput($value));
+            } elseif ($field instanceof StringField) {
+                $query->andStringLike($field->getColumn(), clearInput($value));
+            }
+        }
+
+        $anonymous = Instantiator::make($relatedField->getComponent(), 0);
+        $results = $anonymous::getPage($page, $query);
+        $maxPage = $anonymous::getAmountOfPages($query);
+
+        $r = [];
+        foreach ($results as $result) $r[] = $result->readViewFields('index');
+
+        $fields = $schema->getViewConfigForFields('index');
+        $layout = $schema->getViewLayout('filters', true);
+        $filtersFields = $schema->getViewConfigForFields('filters');
+
+        return Response::ok([
+            'filtersLayout' => $layout,
+            'filtersFields' => $filtersFields,
+            'fields' => $fields,
+            'results' => $r,
+            'maxPage' => $maxPage,
+            'perms' => ['create', 'update', 'read', 'drop']
+        ]);
+    }
+
     public static function optionItems(array $params): Response
     {
         $type = clearInput($params['_lmm_type']);
@@ -280,6 +338,8 @@ class CmsHttp
     public static function createItem($params = []): Response
     {
         $type = clearInput($params['_lmm_type']);
+        $parentId = (int)clearInput($params['_lmm_parent_id']);
+        $parentComponent = clearInput($params['_lmm_pivot_component']);
         $decodedType = Laminim::getModuleByAlias($type);
 
         $data = $params['data'];
@@ -288,6 +348,10 @@ class CmsHttp
         // Assign same table fields
         $item::feedInstance($item, $data, 'create');
         $item->save();
+
+        if ($parentId > 0 && $parentComponent !== '') {
+            $item->linkPivot($parentComponent, $parentId);
+        }
 
         return Response::ok([
             'item' => ['id' => $item->getId()],
