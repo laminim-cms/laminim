@@ -294,9 +294,63 @@ class CmsHttp
         $maxPage = $anonymous::getAmountOfPages($query);
 
         $r = [];
-        foreach ($results as $result) $r[] = $result->readViewFields('index');
+        foreach ($results as $result) $r[] = $result->readViewFields('related');
 
-        $fields = $schema->getViewConfigForFields('index');
+        $fields = $schema->getViewConfigForFields('related');
+        $layout = $schema->getViewLayout('filters', true);
+        $filtersFields = $schema->getViewConfigForFields('filters');
+
+        return Response::ok([
+            'filtersLayout' => $layout,
+            'filtersFields' => $filtersFields,
+            'fields' => $fields,
+            'results' => $r,
+            'maxPage' => $maxPage,
+            'perms' => ['create', 'update', 'read', 'drop']
+        ]);
+    }
+
+    public static function availablePivotItems(array $params): Response
+    {
+        $type = clearInput($params['_lmm_type']);
+        $id = (int)clearInput($params['_lmm_id']);
+        $fieldName = clearInput($params['_lmm_field']);
+
+        $filters = json_decode($params['_lmm_filters'], true);
+        if (!$filters) $filters = [];
+        $page = (int)clearInput($params['page']);
+        $decodedType = Laminim::getModuleByAlias($type);
+        $fromSchema = Schema::get($decodedType);
+
+        $relatedField = $fromSchema->getPivotField($fieldName);
+        if (!$relatedField instanceof PivotField) return Response::notFound();
+
+        $schema = Schema::get($relatedField->getComponent());
+
+        $fromAnonymous = Instantiator::make($decodedType, $id);
+        $query = $fromAnonymous->_getAvailablePivotQueryBuilder($fieldName);
+
+
+        $filtersFieldsObjs = $schema->getViewFields('filters');
+        foreach ($filters as $filter => $value) {
+            $field = $filtersFieldsObjs[$filter];
+            if (!is_object($field)) continue;
+
+            if ($field instanceof StringChoiceField) {
+                $query->andStringEqual($field->getColumn(), clearInput($value));
+            } elseif ($field instanceof StringField) {
+                $query->andStringLike($field->getColumn(), clearInput($value));
+            }
+        }
+
+        $anonymous = Instantiator::make($relatedField->getComponent(), 0);
+        $results = $anonymous::getPage($page, $query);
+        $maxPage = $anonymous::getAmountOfPages($query);
+
+        $r = [];
+        foreach ($results as $result) $r[] = $result->readViewFields('related');
+
+        $fields = $schema->getViewConfigForFields('related');
         $layout = $schema->getViewLayout('filters', true);
         $filtersFields = $schema->getViewConfigForFields('filters');
 
