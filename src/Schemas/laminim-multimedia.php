@@ -47,7 +47,9 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
         ForeignKeyField::defineRelation(User::COMPONENT, 'createdBy', 'created_by')
             ->setLabel('__:lmm.createdBy')
             ->configureView(FieldViewConfig::readMode('edit', 'foreign-key'))
-            ->setDefaultValue(function() { return User::getLoggedId();})
+            ->setDefaultValue(function () {
+                return User::getLoggedId();
+            })
     )
     ->addField(
         StringField::define('name')
@@ -59,6 +61,7 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
     ->addField(
         FileField::define('src')
             ->setLabel('__:lmm.src')
+            ->setDefaultValue('')
             ->setPublicPath('/laminim/open/:component/:field/:id')
             ->setStorePath(APP_DIR . '/private/multimedia')
             ->configureView(FieldViewConfig::readMode('index', 'file'))
@@ -100,15 +103,17 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
                     'createdBy',
                 ]),
             ]
-        )->setConditionalModes('id', 0, [
-            'createdAt' => 'data',
-            'createdBy' => 'data',
-        ])
+        )
+            ->setConditionalModes('id', 0, [
+                'createdAt' => 'data',
+                'createdBy' => 'data',
+            ])
             ->setConditionalModes('type', MultimediaItem::TYPE_VIDEO, ['posterSrc' => 'edit'])
             ->setConditionalModes('type', MultimediaItem::TYPE_VIMEO, ['posterSrc' => 'edit'])
             ->setConditionalModes('type', MultimediaItem::TYPE_YOUTUBE, ['posterSrc' => 'edit'])
             ->setConditionalModes('type', MultimediaItem::TYPE_URL, ['posterSrc' => 'edit'])
+
+            ->setConditionalTypes('type', MultimediaItem::TYPE_YOUTUBE, ['src' => 'text'])
         ,
         ['edit']
-    )
-    ;
+    );
