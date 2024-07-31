@@ -27,7 +27,7 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
     )
     ->setCountableField('id')
     ->setItemsPerPage(20)
-    ->setFieldsForRelatedMode('id', 'name', [])
+    ->setFieldsForRelatedMode('id', 'name', ['id', 'name', 'src', 'type', 'posterSrc', 'mime'])
     ->setExcludedFieldsForViewFeed('create', ['assignedRoles'])
     ->setExcludedFieldsForViewFeed('edit', ['assignedRoles'])
     ->addField(
