@@ -26,29 +26,29 @@ Schema::add(require_once "Schemas/laminim-pages.php");
 
 // Load menu
 LaminimMenuEntry::register(
-    LaminimMenuEntry::define('pages', '/laminim/ls/page', '__:lmm.menu.page', 'icon-stickies')
+    LaminimMenuEntry::define('pages', '/laminim/ls/page', '__:components.page.many', 'icon-stickies')
 );
 
 LaminimMenuEntry::register(
-    LaminimMenuEntry::define('users', '', '__:lmm.menu.user', 'icon-users-cog')
+    LaminimMenuEntry::define('users', '', '__:components.user.many', 'icon-users-cog')
         ->setChildren([
-                LaminimMenuEntry::define('users-users', '/laminim/ls/user', '__:lmm.menu.user', 'icon-users-cog'),
-                LaminimMenuEntry::define('users-roles', '/laminim/ls/role', '__:lmm.menu.role', 'icon-users-cog'),
+                LaminimMenuEntry::define('users-users', '/laminim/ls/user', '__:components.user.many', 'icon-users-cog'),
+                LaminimMenuEntry::define('users-roles', '/laminim/ls/role', '__:components.role.many', 'icon-users-cog'),
             ]
         )
 );
 
 LaminimMenuEntry::register(
-    LaminimMenuEntry::define('i18n', '', '__:lmm.menu.i18n', 'icon-globe')
+    LaminimMenuEntry::define('i18n', '', '__:components.i18n.many', 'icon-globe')
         ->setChildren([
-                LaminimMenuEntry::define('i18n-i18n', '/laminim/ls/i18n', '__:lmm.menu.i18n', 'icon-globe'),
-                LaminimMenuEntry::define('i18n-stack', '/laminim/ls/i18n-stack', '__:lmm.menu.i18nStack', 'icon-globe'),
+                LaminimMenuEntry::define('i18n-i18n', '/laminim/ls/i18n', '__:components.i18n.many', 'icon-globe'),
+                LaminimMenuEntry::define('i18n-stack', '/laminim/ls/i18n-stack', '__:components.i18n-stack.many', 'icon-globe'),
             ]
         )
 );
 
 LaminimMenuEntry::register(
-    LaminimMenuEntry::define('files', '/laminim/ls/multimedia', '__:lmm.menu.multimedia', 'icon-folder')
+    LaminimMenuEntry::define('files', '/laminim/ls/multimedia', '__:components.multimedia.many', 'icon-folder')
 );
 
 // Setup permissions

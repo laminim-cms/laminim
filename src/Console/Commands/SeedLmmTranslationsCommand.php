@@ -186,109 +186,24 @@ class SeedLmmTranslationsCommand extends Command
             'es' => 'Bloque',
         ]);
 
-        Translation::ensureKey($stack, 'title.index.i18n', 'text', [
-            'en' => 'Translations',
-            'es' => 'Traducciones',
+        Translation::ensureKey($stack, 'title.menu.component', 'text', [
+            'en' => ':component',
+            'es' => ':component',
         ]);
 
-        Translation::ensureKey($stack, 'title.edit.i18n', 'text', [
-            'en' => 'Edit Translation',
-            'es' => 'Editar Traducción',
+        Translation::ensureKey($stack, 'title.index.component', 'text', [
+            'en' => ':component',
+            'es' => ':component',
         ]);
 
-        Translation::ensureKey($stack, 'title.create.i18n', 'text', [
-            'en' => 'Create Translation',
-            'es' => 'Crear Traducción',
+        Translation::ensureKey($stack, 'title.create.component', 'text', [
+            'en' => 'Create :component',
+            'es' => 'Crear :component',
         ]);
 
-        Translation::ensureKey($stack, 'title.index.i18n-stack', 'text', [
-            'en' => 'Translations Stack',
-            'es' => 'Grupos de Traducciones',
-        ]);
-
-        Translation::ensureKey($stack, 'title.edit.i18n-stack', 'text', [
-            'en' => 'Edit Translation Stack',
-            'es' => 'Editar Grupo de Traducciones',
-        ]);
-
-        Translation::ensureKey($stack, 'title.create.i18n-stack', 'text', [
-            'en' => 'Create Translation Stack',
-            'es' => 'Crear Grupo de Traducciones',
-        ]);
-
-        Translation::ensureKey($stack, 'title.index.user', 'text', [
-            'en' => 'Users',
-            'es' => 'Usuarios',
-        ]);
-
-        Translation::ensureKey($stack, 'title.edit.user', 'text', [
-            'en' => 'Edit User',
-            'es' => 'Editar Usuario',
-        ]);
-
-        Translation::ensureKey($stack, 'title.create.user', 'text', [
-            'en' => 'Create User',
-            'es' => 'Crear Usuario',
-        ]);
-
-        Translation::ensureKey($stack, 'title.index.role', 'text', [
-            'en' => 'Roles',
-            'es' => 'Roles',
-        ]);
-
-        Translation::ensureKey($stack, 'title.edit.role', 'text', [
-            'en' => 'Edit Role',
-            'es' => 'Editar Rol',
-        ]);
-
-        Translation::ensureKey($stack, 'title.create.role', 'text', [
-            'en' => 'Create Role',
-            'es' => 'Crear Rol',
-        ]);
-
-        Translation::ensureKey($stack, 'title.index.page', 'text', [
-            'en' => 'Pages',
-            'es' => 'Páginas',
-        ]);
-
-        Translation::ensureKey($stack, 'title.edit.page', 'text', [
-            'en' => 'Edit Page',
-            'es' => 'Editar Página',
-        ]);
-
-        Translation::ensureKey($stack, 'title.create.page', 'text', [
-            'en' => 'Create Page',
-            'es' => 'Crear Página',
-        ]);
-
-        Translation::ensureKey($stack, 'menu.page', 'text', [
-            'en' => 'Pages',
-            'es' => 'Páginas',
-        ]);
-
-        Translation::ensureKey($stack, 'menu.user', 'text', [
-            'en' => 'Users',
-            'es' => 'Usuarios',
-        ]);
-
-        Translation::ensureKey($stack, 'menu.role', 'text', [
-            'en' => 'Roles',
-            'es' => 'Roles',
-        ]);
-
-        Translation::ensureKey($stack, 'menu.i18n', 'text', [
-            'en' => 'Translations',
-            'es' => 'Traducciones',
-        ]);
-
-        Translation::ensureKey($stack, 'menu.i18nStack', 'text', [
-            'en' => 'Stacks',
-            'es' => 'Grupos',
-        ]);
-
-        Translation::ensureKey($stack, 'menu.multimedia', 'text', [
-            'en' => 'Multimedia',
-            'es' => 'Multimedia',
+        Translation::ensureKey($stack, 'title.edit.component', 'text', [
+            'en' => 'Edit :component',
+            'es' => 'Editar :component',
         ]);
 
         Translation::ensureChoice($stack, 'i18nChoices', [
@@ -338,6 +253,56 @@ class SeedLmmTranslationsCommand extends Command
         Translation::ensureKey($stack, 'page.one', 'text', [
             'en' => 'Page',
             'es' => 'Página',
+        ]);
+
+        Translation::ensureKey($stack, 'user.many', 'text', [
+            'en' => 'Users',
+            'es' => 'Usuarios',
+        ]);
+
+        Translation::ensureKey($stack, 'user.one', 'text', [
+            'en' => 'User',
+            'es' => 'Usuario',
+        ]);
+
+        Translation::ensureKey($stack, 'role.many', 'text', [
+            'en' => 'Role',
+            'es' => 'Roles',
+        ]);
+
+        Translation::ensureKey($stack, 'role.one', 'text', [
+            'en' => 'Role',
+            'es' => 'Rol',
+        ]);
+
+        Translation::ensureKey($stack, 'i18n.many', 'text', [
+            'en' => 'Translations',
+            'es' => 'Traducciones',
+        ]);
+
+        Translation::ensureKey($stack, 'i18n.one', 'text', [
+            'en' => 'Translation',
+            'es' => 'Traducciones',
+        ]);
+
+        Translation::ensureKey($stack, 'i18n-stack.many', 'text', [
+            'en' => 'Translations Stacks',
+            'es' => 'Grupos de Traducciones',
+        ]);
+
+        Translation::ensureKey($stack, 'i18n-stack.one', 'text', [
+            'en' => 'Translation Stack',
+            'es' => 'Grupo de Traducciones',
+        ]);
+
+        Translation::ensureKey($stack, 'multimedia.many', 'text', [
+            'en' => 'Multimedia',
+            'es' => 'Multimedia',
+        ]);
+
+        Translation::ensureKey($stack, 'multimedia.one', 'text', [
+            'en' => 'Multimedia',
+            'es' => 'Multimedia',
         ]);
     }
 }

@@ -12,6 +12,7 @@ use Lkt\Factory\Instantiator\Instantiator;
 use Lkt\Factory\Schemas\Fields\AbstractField;
 use Lkt\Factory\Schemas\Fields\FileField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
+use Lkt\Factory\Schemas\Fields\IntegerField;
 use Lkt\Factory\Schemas\Fields\PivotField;
 use Lkt\Factory\Schemas\Fields\RelatedField;
 use Lkt\Factory\Schemas\Fields\StringChoiceField;
@@ -169,12 +170,16 @@ class CmsHttp
         $filtersFieldsObjs = $schema->getViewFields('filters');
         foreach ($filters as $filter => $value) {
             $field = $filtersFieldsObjs[$filter];
+            if (!is_object($field)) $field = $schema->getField($filter);
             if (!is_object($field)) continue;
 
             if ($field instanceof StringChoiceField) {
                 $query->andStringEqual($field->getColumn(), clearInput($value));
             } elseif ($field instanceof StringField) {
                 $query->andStringLike($field->getColumn(), clearInput($value));
+
+            } elseif ($field instanceof IntegerField) {
+                $query->andIntegerEqual($field->getColumn(), clearInput($value));
             }
         }
         $results = $anonymous::getPage($page, $query);

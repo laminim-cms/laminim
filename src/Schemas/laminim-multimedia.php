@@ -4,7 +4,6 @@ namespace LaminimCMS\Schemas;
 
 use LaminimCMS\Instances\MultimediaItem;
 use LaminimCMS\Instances\User;
-use LaminimCMS\Laminim;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\FileField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
@@ -59,6 +58,12 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
             ->configureView(FieldViewConfig::editMode('edit', 'text'))
     )
     ->addField(
+        StringField::define('url')
+            ->setLabel('__:lmm.url')
+            ->configureView(FieldViewConfig::dataMode('create', 'text'))
+            ->configureView(FieldViewConfig::dataMode('edit', 'text'))
+    )
+    ->addField(
         FileField::define('src')
             ->setLabel('__:lmm.src')
             ->setDefaultValue('')
@@ -93,27 +98,32 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
     )
     ->setLayout(
         GridLayout::define('create', 1, [
-                GridLayout::define('main-data', 2, [
-                    GridLayout::define('main-data', 1, ['name', 'type']),
-                    GridLayout::define('main-data', 2, ['src', 'posterSrc']),
+                GridLayout::define('main-data', 1, [
+                    GridLayout::define('main-data', 2, ['name', 'type']),
+                    GridLayout::define('main-data', 1, ['url', 'src', 'posterSrc'])
+                        ->setConditionalModes('type', [
+                            MultimediaItem::TYPE_VIDEO,
+                            MultimediaItem::TYPE_VIMEO,
+                            MultimediaItem::TYPE_YOUTUBE,
+                            MultimediaItem::TYPE_URL,
+                        ], ['posterSrc' => 'edit'])
+                        ->setConditionalModes('type', [
+                            MultimediaItem::TYPE_VIMEO,
+                            MultimediaItem::TYPE_YOUTUBE,
+                            MultimediaItem::TYPE_URL,
+                        ], [
+                            'src' => 'data',
+                            'url' => 'edit',
+                        ]),
                 ]),
                 'mime',
                 GridLayout::define('main-data', 2, [
                     'createdAt',
                     'createdBy',
+                ])->setConditionalModes('id', 0, [
+                    'createdAt' => 'data',
+                    'createdBy' => 'data',
                 ]),
             ]
-        )
-            ->setConditionalModes('id', 0, [
-                'createdAt' => 'data',
-                'createdBy' => 'data',
-            ])
-            ->setConditionalModes('type', MultimediaItem::TYPE_VIDEO, ['posterSrc' => 'edit'])
-            ->setConditionalModes('type', MultimediaItem::TYPE_VIMEO, ['posterSrc' => 'edit'])
-            ->setConditionalModes('type', MultimediaItem::TYPE_YOUTUBE, ['posterSrc' => 'edit'])
-            ->setConditionalModes('type', MultimediaItem::TYPE_URL, ['posterSrc' => 'edit'])
-
-            ->setConditionalTypes('type', MultimediaItem::TYPE_YOUTUBE, ['src' => 'text'])
-        ,
-        ['edit']
+        ), ['edit']
     );
