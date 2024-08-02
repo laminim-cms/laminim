@@ -206,6 +206,26 @@ class SeedLmmTranslationsCommand extends Command
             'es' => 'Editar :component',
         ]);
 
+        Translation::ensureKey($stack, 'startedAt', 'text', [
+            'en' => 'Started at',
+            'es' => 'Fecha de inicio',
+        ]);
+
+        Translation::ensureKey($stack, 'finishedAt', 'text', [
+            'en' => 'Finished at',
+            'es' => 'Fecha de fin',
+        ]);
+
+        Translation::ensureKey($stack, 'about', 'text', [
+            'en' => 'About',
+            'es' => 'Acerca de',
+        ]);
+
+        Translation::ensureKey($stack, 'experience', 'text', [
+            'en' => 'Experience',
+            'es' => 'Experiencia',
+        ]);
+
         Translation::ensureChoice($stack, 'i18nChoices', [
             ['name' => Translation::TYPE_CHOICE, 'valueEn' => 'Choice', 'valueEs' => 'Elección'],
             ['name' => Translation::TYPE_EDITOR, 'valueEn' => 'Editor', 'valueEs' => 'Editor'],
