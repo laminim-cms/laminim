@@ -70,6 +70,7 @@ class Laminim
         // CRUD routes
         GetRoute::register('/laminim/{_lmm_type}/config', [CmsHttp::class, 'getContentConfig']);
         GetRoute::register('/laminim/{_lmm_type}/index', [CmsHttp::class, 'indexItems']);
+        GetRoute::register('/laminim/{_lmm_type}/{_lmm_own_type}/{_lmm_field}/index', [CmsHttp::class, 'indexForField']);
         GetRoute::register('/laminim/{_lmm_type}/options', [CmsHttp::class, 'optionItems']);
         GetRoute::register('/laminim/{_lmm_type}/{id}/read', [CmsHttp::class, 'readItem']);
         PostRoute::register('/laminim/{_lmm_type}/create', [CmsHttp::class, 'createItem']);
@@ -82,31 +83,6 @@ class Laminim
         GetRoute::register('/laminim/load/i18n', [CmsHttp::class, 'loadI18n']);
         GetRoute::register('/laminim/load/modules', [CmsHttp::class, 'loadModules']);
         GetRoute::register('/laminim/load/menu', [CmsHttp::class, 'loadMenu']);
-
-        foreach (static::$modules as $module => $config) {
-            foreach ($config['schemas'] as $schema) {
-                Schema::add($schema);
-            }
-//            foreach ($config['routes'] as $route) {
-//                switch ($route['type']) {
-//                    case 'GET':
-//                        GetRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
-//                        break;
-//
-//                    case 'POST':
-//                        PostRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
-//                        break;
-//
-//                    case 'PUT':
-//                        PutRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
-//                        break;
-//
-//                    case 'DELETE':
-//                        DeleteRoute::register($route['route'], $route['callable'])->setLaminimConfig($route);
-//                        break;
-//                }
-//            }
-        }
 
         // Wildcard at the end (catch all)
         GetRoute::register('/laminim[/{path}]', [CmsHttp::class, 'indexHTML']);

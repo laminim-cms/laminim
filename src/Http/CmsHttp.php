@@ -202,6 +202,64 @@ class CmsHttp
         ]);
     }
 
+    public static function indexForField(array $params): Response
+    {
+        $type = clearInput($params['_lmm_type']);
+        $ownType = clearInput($params['_lmm_own_type']);
+        $fieldName = clearInput($params['_lmm_field']);
+        $filters = json_decode($params['_lmm_filters'], true);
+        if (!$filters) $filters = [];
+        $page = (int)clearInput($params['page']);
+        $decodedType = Laminim::getModuleByAlias($type);
+        $decodedOwnType = Laminim::getModuleByAlias($ownType);
+        $schema = Schema::get($decodedType);
+        $ownSchema = Schema::get($decodedOwnType);
+
+        $anonymous = Instantiator::make($decodedType, 0);
+        $query = $anonymous::getQueryCaller();
+
+        $field = $ownSchema->getField($fieldName);
+
+        if (method_exists($field, 'getAvailableOptionsFilter')) {
+            $where = $field->getAvailableOptionsFilter();
+            $query->andRaw(implode(' AND ', $where));
+        }
+
+        $filtersFieldsObjs = $schema->getViewFields('filters');
+        foreach ($filters as $filter => $value) {
+            $field = $filtersFieldsObjs[$filter];
+            if (!is_object($field)) $field = $schema->getField($filter);
+            if (!is_object($field)) continue;
+
+            if ($field instanceof StringChoiceField) {
+                $query->andStringEqual($field->getColumn(), clearInput($value));
+            } elseif ($field instanceof StringField) {
+                $query->andStringLike($field->getColumn(), clearInput($value));
+
+            } elseif ($field instanceof IntegerField) {
+                $query->andIntegerEqual($field->getColumn(), clearInput($value));
+            }
+        }
+        $results = $anonymous::getPage($page, $query);
+        $maxPage = $anonymous::getAmountOfPages($query);
+
+        $r = [];
+        foreach ($results as $result) $r[] = $result->readViewFields('index');
+
+        $fields = $schema->getViewConfigForFields('index');
+        $layout = $schema->getViewLayout('filters', true);
+        $filtersFields = $schema->getViewConfigForFields('filters');
+
+        return Response::ok([
+            'filtersLayout' => $layout,
+            'filtersFields' => $filtersFields,
+            'fields' => $fields,
+            'results' => $r,
+            'maxPage' => $maxPage,
+            'perms' => ['create', 'update', 'read', 'drop']
+        ]);
+    }
+
     public static function relatedItems(array $params): Response
     {
         $type = clearInput($params['_lmm_type']);

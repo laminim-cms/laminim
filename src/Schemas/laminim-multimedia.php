@@ -27,8 +27,6 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
     ->setCountableField('id')
     ->setItemsPerPage(20)
     ->setFieldsForRelatedMode('id', 'name', ['id', 'name', 'src', 'type', 'posterSrc', 'mime'])
-    ->setExcludedFieldsForViewFeed('create', ['assignedRoles'])
-    ->setExcludedFieldsForViewFeed('edit', ['assignedRoles'])
     ->addField(
         IdField::define('id')
             ->setLabel('__:lmm.id')
@@ -54,6 +52,7 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
         StringField::define('name')
             ->setLabel('__:lmm.name')
             ->configureView(FieldViewConfig::readMode('index', 'text'))
+            ->configureView(FieldViewConfig::editMode('filters', 'text'))
             ->configureView(FieldViewConfig::editMode('create', 'text'))
             ->configureView(FieldViewConfig::editMode('edit', 'text'))
     )
@@ -86,6 +85,7 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
             ->setDefaultValue(MultimediaItem::TYPE_IMAGE)
             ->setLabel('__:lmm.type')
             ->configureView(FieldViewConfig::readMode('index', 'i18n-choice'))
+            ->configureView(FieldViewConfig::editMode('filters', 'i18n-choice'))
             ->configureView(FieldViewConfig::editMode('create', 'i18n-choice'))
             ->configureView(FieldViewConfig::editMode('edit', 'i18n-choice'))
             ->setI18nViewOptions('lmm.multimediaTypeChoices')
@@ -126,4 +126,10 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
                 ]),
             ]
         ), ['edit']
+    )
+    ->setLayout(
+        GridLayout::define('filters', 2, [
+                'name', 'type'
+            ]
+        )
     );
