@@ -29,5 +29,10 @@
     "files": [
       "src/init.php"
     ]
-  }
+  },
+  "repositories": [
+    {"type": "path", "url": "../../lib/lkt/factory-schemas"},
+    {"type": "path", "url": "../../lib/lkt/factory-instantiator"},
+    {"type": "path", "url": "../../lib/lkt/code-maker"}
+  ]
 }

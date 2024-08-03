@@ -18,9 +18,6 @@ use Lkt\Factory\Schemas\Views\Layouts\GridLayout;
 return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
     ->setInstanceSettings(
         InstanceSettings::define(MultimediaItem::class)
-            ->setClassNameForGeneratedClass('GeneratedMultimediaItem')
-            ->setQueryCallerClassName('MultimediaItemQueryBuilder')
-            ->setWhereClassName('MultimediaItemWhere')
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )

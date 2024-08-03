@@ -20,9 +20,6 @@ use Lkt\Factory\Schemas\Views\Layouts\GridLayout;
 return Schema::table('lmm_users', User::COMPONENT)
     ->setInstanceSettings(
         InstanceSettings::define(User::class)
-            ->setClassNameForGeneratedClass('GeneratedUser')
-            ->setQueryCallerClassName('UserQueryBuilder')
-            ->setWhereClassName('UserWhere')
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )

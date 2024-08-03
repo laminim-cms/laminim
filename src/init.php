@@ -23,6 +23,7 @@ Schema::add(require_once "Schemas/laminim-translations.php");
 Schema::add(require_once "Schemas/laminim-translations-stacks.php");
 Schema::add(require_once "Schemas/laminim-multimedia.php");
 Schema::add(require_once "Schemas/laminim-pages.php");
+Schema::add(require_once "Schemas/laminim-metadata.php");
 
 // Load menu
 LaminimMenuEntry::register(

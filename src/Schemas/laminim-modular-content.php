@@ -13,9 +13,6 @@ use Lkt\Factory\Schemas\Schema;
 return Schema::table('lmm_modular_content', ModularContent::COMPONENT)
     ->setInstanceSettings(
         InstanceSettings::define(ModularContent::class)
-            ->setClassNameForGeneratedClass('GeneratedModularContent')
-            ->setQueryCallerClassName('ModularContentQueryBuilder')
-            ->setWhereClassName('ModularContentWhere')
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )

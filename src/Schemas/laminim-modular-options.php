@@ -13,9 +13,6 @@ use Lkt\Factory\Schemas\Views\FieldViewConfig;
 return Schema::table('lmm_modular_options', ModularOption::COMPONENT)
     ->setInstanceSettings(
         InstanceSettings::define(ModularOption::class)
-            ->setClassNameForGeneratedClass('GeneratedModularOption')
-            ->setQueryCallerClassName('ModularOptionQueryBuilder')
-            ->setWhereClassName('ModularOptionWhere')
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )

@@ -156,8 +156,16 @@ class CmsHttp
 
     public static function indexItems(array $params): Response
     {
+        $itemsPerPage = (int)clearInput($params['_lmm_items_per_page']);
         $type = clearInput($params['_lmm_type']);
-        $filters = json_decode($params['_lmm_filters'], true);
+        $view = clearInput($params['_lmm_view']);
+        if ($view === '') $view = 'index';
+        $viewFilters = clearInput($params['_lmm_view_filters']);
+        if ($viewFilters === '') $viewFilters = 'filters';
+        $filters = $params['_lmm_filters'];
+        if (is_string($filters)) {
+            $filters = json_decode($filters, true);
+        }
         if (!$filters) $filters = [];
         $page = (int)clearInput($params['page']);
         $decodedType = Laminim::getModuleByAlias($type);
@@ -167,30 +175,47 @@ class CmsHttp
         $query = $anonymous::getQueryCaller();
 
 
-        $filtersFieldsObjs = $schema->getViewFields('filters');
+        $filtersFieldsObjs = $schema->getViewFields($viewFilters);
         foreach ($filters as $filter => $value) {
             $field = $filtersFieldsObjs[$filter];
             if (!is_object($field)) $field = $schema->getField($filter);
             if (!is_object($field)) continue;
 
             if ($field instanceof StringChoiceField) {
-                $query->andStringEqual($field->getColumn(), clearInput($value));
+                if (is_array($value)) {
+                    $query->andStringIn($field->getColumn(), $value);
+                } else {
+                    $query->andStringEqual($field->getColumn(), clearInput($value));
+                }
             } elseif ($field instanceof StringField) {
-                $query->andStringLike($field->getColumn(), clearInput($value));
+                if (is_array($value)) {
+                    $query->andStringIn($field->getColumn(), $value);
+                } else {
+                    $query->andStringLike($field->getColumn(), clearInput($value));
+                }
 
             } elseif ($field instanceof IntegerField) {
-                $query->andIntegerEqual($field->getColumn(), clearInput($value));
+                if (is_array($value)) {
+                    $query->andIntegerIn($field->getColumn(), $value);
+                } else {
+                    $query->andIntegerEqual($field->getColumn(), (int)clearInput($value));
+                }
             }
         }
+
+        if ($itemsPerPage > 0) {
+            $query->pagination($page, $itemsPerPage);
+        }
+
         $results = $anonymous::getPage($page, $query);
         $maxPage = $anonymous::getAmountOfPages($query);
 
         $r = [];
-        foreach ($results as $result) $r[] = $result->readViewFields('index');
+        foreach ($results as $result) $r[] = $result->readViewFields($view);
 
-        $fields = $schema->getViewConfigForFields('index');
-        $layout = $schema->getViewLayout('filters', true);
-        $filtersFields = $schema->getViewConfigForFields('filters');
+        $fields = $schema->getViewConfigForFields($view);
+        $layout = $schema->getViewLayout($viewFilters, true);
+        $filtersFields = $schema->getViewConfigForFields($viewFilters);
 
         return Response::ok([
             'filtersLayout' => $layout,

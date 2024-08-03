@@ -17,9 +17,6 @@ use Lkt\Factory\Schemas\Views\Layouts\GridLayout;
 return Schema::table('lmm_user_roles', UserRole::COMPONENT)
     ->setInstanceSettings(
         InstanceSettings::define(UserRole::class)
-            ->setClassNameForGeneratedClass('GeneratedUserRole')
-            ->setQueryCallerClassName('UserRoleQueryBuilder')
-            ->setWhereClassName('UserRoleWhere')
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )

@@ -2,9 +2,7 @@
 
 namespace LaminimCMS\Schemas;
 
-use LaminimCMS\Generated\ModularBlockWhere;
 use LaminimCMS\Generated\ModularOptionWhere;
-use LaminimCMS\Instances\ModularBlock;
 use LaminimCMS\Instances\ModularOption;
 use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\TranslationStack;
@@ -22,9 +20,6 @@ use Lkt\Factory\Schemas\Views\Layouts\GridLayout;
 return Schema::table('lmm_i18n', Translation::COMPONENT)
     ->setInstanceSettings(
         InstanceSettings::define(Translation::class)
-            ->setClassNameForGeneratedClass('GeneratedTranslation')
-            ->setQueryCallerClassName('TranslationQueryBuilder')
-            ->setWhereClassName('TranslationWhere')
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )

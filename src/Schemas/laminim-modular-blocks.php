@@ -16,9 +16,6 @@ use Lkt\Factory\Schemas\Views\FieldViewConfig;
 return Schema::table('lmm_modular_blocks', ModularBlock::COMPONENT)
     ->setInstanceSettings(
         InstanceSettings::define(ModularBlock::class)
-            ->setClassNameForGeneratedClass('GeneratedModularBlock')
-            ->setQueryCallerClassName('ModularBlockQueryBuilder')
-            ->setWhereClassName('ModularBlockWhere')
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )

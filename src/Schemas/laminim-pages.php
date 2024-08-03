@@ -2,7 +2,9 @@
 
 namespace LaminimCMS\Schemas;
 
+use LaminimCMS\Generated\MetadataWhere;
 use LaminimCMS\Generated\ModularBlockWhere;
+use LaminimCMS\Instances\Metadata;
 use LaminimCMS\Instances\ModularBlock;
 use LaminimCMS\Instances\Page;
 use LaminimCMS\Instances\User;
@@ -19,9 +21,6 @@ use Lkt\Factory\Schemas\Views\Layouts\GridLayout;
 return Schema::table('lmm_pages', Page::COMPONENT)
     ->setInstanceSettings(
         InstanceSettings::define(Page::class)
-            ->setClassNameForGeneratedClass('GeneratedPage')
-            ->setQueryCallerClassName('PageQueryBuilder')
-            ->setWhereClassName('PageWhere')
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )
@@ -65,10 +64,20 @@ return Schema::table('lmm_pages', Page::COMPONENT)
             ->configureView(FieldViewConfig::editMode('create', 'lmm-modular-blocks'))
             ->configureView(FieldViewConfig::editMode('edit', 'lmm-modular-blocks'))
     )
+    ->addField(
+        RelatedField::defineRelation(Metadata::COMPONENT, 'metadata', 'itemId')
+            ->setSingleMode()
+            ->addRelatedComponentFeed('type', Page::COMPONENT)
+            ->setWhere(MetadataWhere::itemTypeEqual(Page::COMPONENT))
+            ->setLabel('__:lmm.metadata')
+            ->configureView(FieldViewConfig::editMode('create', 'lmm-metadata'))
+            ->configureView(FieldViewConfig::editMode('edit', 'lmm-metadata'))
+    )
     ->setLayout(GridLayout::define('edit', 1, [
             'name',
             GridLayout::define('main-data', 2, ['createdAt', 'createdBy']),
-            'modularBlocks'
+            'modularBlocks',
+            'metadata',
         ]
     ))
     ;
