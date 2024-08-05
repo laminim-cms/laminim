@@ -521,7 +521,7 @@ class CmsHttp
     public static function readItem(array $params): Response
     {
         $type = clearInput($params['_lmm_type']);
-        $identifier = clearInput($params['id']);
+        $identifier = clearInput($params['_lmm_id']);
         $decodedType = Laminim::getModuleByAlias($type);
         $schema = Schema::get($decodedType);
 

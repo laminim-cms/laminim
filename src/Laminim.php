@@ -74,7 +74,7 @@ class Laminim
         GetRoute::register('/laminim/{_lmm_type}/options', [CmsHttp::class, 'optionItems']);
         GetRoute::register('/laminim/{_lmm_type}/{id}/read', [CmsHttp::class, 'readItem']);
         PostRoute::register('/laminim/{_lmm_type}/create', [CmsHttp::class, 'createItem']);
-        PutRoute::register('/laminim/{_lmm_type}/{id}/update', [CmsHttp::class, 'updateItem']);
+        PutRoute::register('/laminim/{_lmm_type}/{_lmm_id}/update', [CmsHttp::class, 'updateItem']);
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_id}/related/{_lmm_field}', [CmsHttp::class, 'relatedItems']);
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_id}/pivot/{_lmm_field}', [CmsHttp::class, 'pivotItems']);
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_id}/pivot/{_lmm_field}/available', [CmsHttp::class, 'availablePivotItems']);
