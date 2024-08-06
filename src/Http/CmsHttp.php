@@ -5,6 +5,8 @@ namespace LaminimCMS\Http;
 use chillerlan\Filereader\File;
 use LaminimCMS\Config\LaminimMenuEntry;
 use LaminimCMS\Config\LaminimModule;
+use LaminimCMS\Generated\MetadataWhere;
+use LaminimCMS\Instances\Metadata;
 use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Laminim;
@@ -224,6 +226,53 @@ class CmsHttp
             'results' => $r,
             'maxPage' => $maxPage,
             'perms' => ['create', 'update', 'read', 'drop']
+        ]);
+    }
+
+    public static function validateMetadataSlug(array $params): Response
+    {
+        $type = clearInput($params['_lmm_type']);
+        $id = (int)clearInput($params['_lmm_id']);
+        $slug = clearInput($params['value']);
+        $decodedType = Laminim::getModuleByAlias($type);
+
+//        $query = Metadata::getQueryCaller()
+//            ->andItemTypeEqual($decodedType)
+//            ->andWhere(
+//                MetadataWhere::getEmpty()
+//                    ->andWhere(MetadataWhere::itemEqual($id)->andUrlEqual($slug))
+//                    ->orWhere(MetadataWhere::itemNot($id)->andUrlEqual($slug))
+//            )
+//        ;
+
+        $query = Metadata::getQueryCaller()
+            ->andItemTypeEqual($decodedType)
+            ->andUrlEqual($slug)
+        ;
+
+        $results = Metadata::getMany($query);
+
+        // Not in use
+        if (!$results) return Response::ok();
+
+        // Same slug for this item
+        if (count($results) === 1 && $results[0]->getItemId() === $id)  {
+            return Response::ok();
+        }
+
+        // Increment slug
+        $query = Metadata::getQueryCaller()
+            ->andItemTypeEqual($decodedType)
+            ->andUrlBeginsLike($slug)
+        ;
+        $results = Metadata::getMany($query);
+
+        $map = array_map(function (Metadata $item) { return $item->getUrl();}, $results);
+
+        return Response::ok([
+            'data' => [
+                'available' => $slug . '-' . count($map),
+            ]
         ]);
     }
 
@@ -452,6 +501,29 @@ class CmsHttp
         ]);
     }
 
+    public static function storePivotItems(array $params): Response
+    {
+        $type = clearInput($params['_lmm_type']);
+        $id = (int)clearInput($params['_lmm_id']);
+        $fieldName = clearInput($params['_lmm_field']);
+        $data = $params['_lmm_data'];
+        if (!is_array($data)) $data = json_decode($data, true);
+        if (!$data) $data = [];
+
+        $decodedType = Laminim::getModuleByAlias($type);
+        $fromSchema = Schema::get($decodedType);
+
+        $relatedField = $fromSchema->getPivotField($fieldName);
+        if (!$relatedField instanceof PivotField) return Response::notFound();
+
+        $fromInstance = Instantiator::make($decodedType, $id);
+        foreach ($data as $datum) {
+            $fromInstance->linkPivot($relatedField->getPivotComponent(), $datum);
+        }
+
+        return Response::ok([]);
+    }
+
     public static function optionItems(array $params): Response
     {
         $type = clearInput($params['_lmm_type']);
@@ -512,6 +584,22 @@ class CmsHttp
         // Assign same table fields
         $item::feedInstance($item, $data, 'edit');
         $item->save();
+
+        return Response::ok([
+            'item' => ['id' => $item->getId()],
+        ]);
+    }
+
+    public static function deleteItem($params = []): Response
+    {
+        $type = clearInput($params['_lmm_type']);
+        $id = clearInput($params['id']);
+        $decodedType = Laminim::getModuleByAlias($type);
+
+        $item = Instantiator::make($decodedType, $id);
+
+        // Assign same table fields
+        $item->delete();
 
         return Response::ok([
             'item' => ['id' => $item->getId()],

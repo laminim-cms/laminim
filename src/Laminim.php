@@ -10,6 +10,7 @@ use LaminimCMS\Instances\TranslationStack;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Instances\UserRole;
 use Lkt\Factory\Schemas\Schema;
+use Lkt\Http\Routes\DeleteRoute;
 use Lkt\Http\Routes\GetRoute;
 use Lkt\Http\Routes\PostRoute;
 use Lkt\Http\Routes\PutRoute;
@@ -70,14 +71,17 @@ class Laminim
         // CRUD routes
         GetRoute::register('/laminim/{_lmm_type}/config', [CmsHttp::class, 'getContentConfig']);
         GetRoute::register('/laminim/{_lmm_type}/index', [CmsHttp::class, 'indexItems']);
+        GetRoute::register('/laminim/{_lmm_type}/metadata-slug', [CmsHttp::class, 'validateMetadataSlug']);
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_own_type}/{_lmm_field}/index', [CmsHttp::class, 'indexForField']);
         GetRoute::register('/laminim/{_lmm_type}/options', [CmsHttp::class, 'optionItems']);
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_id}/read', [CmsHttp::class, 'readItem']);
         PostRoute::register('/laminim/{_lmm_type}/create', [CmsHttp::class, 'createItem']);
         PutRoute::register('/laminim/{_lmm_type}/{id}/update', [CmsHttp::class, 'updateItem']);
+        DeleteRoute::register('/laminim/{_lmm_type}/{id}/drop', [CmsHttp::class, 'deleteItem']);
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_id}/related/{_lmm_field}', [CmsHttp::class, 'relatedItems']);
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_id}/pivot/{_lmm_field}', [CmsHttp::class, 'pivotItems']);
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_id}/pivot/{_lmm_field}/available', [CmsHttp::class, 'availablePivotItems']);
+        PutRoute::register('/laminim/{_lmm_type}/{_lmm_id}/pivot/{_lmm_field}/store', [CmsHttp::class, 'storePivotItems']);
 
         // Load routes
         GetRoute::register('/laminim/load/i18n', [CmsHttp::class, 'loadI18n']);
