@@ -13,6 +13,7 @@ class Laminim00000101000002 extends AbstractMigration
             ->addColumn('type', 'string', ['limit' => 255, 'default' => ''])
             ->addColumn('visible', 'boolean', ['default' => true])
             ->addColumn('breakpoints', 'text', ['null' => true, 'default' => null])
+            ->addColumn('items', 'text', ['null' => true, 'default' => null])
             ->addColumn('config', 'text', ['null' => true, 'default' => null])
             ->create();
     }

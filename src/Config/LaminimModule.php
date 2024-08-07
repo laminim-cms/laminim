@@ -10,12 +10,15 @@ class LaminimModule
 
     protected string $name = '';
     protected string $title = '';
+    protected string $component = '';
+    protected bool $freePick = false;
 
     protected string $mode = '';
 
     protected Schema|null $schema = null;
 
     const MODE_AUTO = 'auto';
+    const MODE_ITEM_LIST = 'item-list';
     const MODE_ROUTE = 'route';
     const MODE_LAYOUT = 'layout';
 
@@ -46,6 +49,18 @@ class LaminimModule
         return static::$MODS[$r->name];
     }
 
+    public static function defineItemList(string $name, string $title, string $component, bool $freePick = false): static
+    {
+        $r = new static();
+        $r->name = $name;
+        $r->title = $title;
+        $r->mode = static::MODE_ITEM_LIST;
+        $r->component = $component;
+        $r->freePick = $freePick;
+        static::$MODS[$r->name] = $r;
+        return static::$MODS[$r->name];
+    }
+
     public static function defineRoute(string $name, string $title): static
     {
         $r = new static();
@@ -61,7 +76,7 @@ class LaminimModule
         $r = new static();
         $r->name = $name;
         $r->title = $title;
-        $r->mode = static::MODE_ROUTE;
+        $r->mode = static::MODE_LAYOUT;
         $r->schema = $schema;
         static::$MODS[$r->name] = $r;
         return static::$MODS[$r->name];
@@ -73,6 +88,8 @@ class LaminimModule
             'value' => $this->name,
             'label' => $this->title,
             'mode' => $this->mode,
+            'component' => $this->component,
+            'freePick' => $this->freePick,
         ];
     }
 

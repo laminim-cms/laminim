@@ -66,6 +66,7 @@ Permission::enableComponentPermission(User::COMPONENT, 'drop');
 Permission::enableComponentPermission(User::COMPONENT, 'admin');
 
 LaminimModule::defineAuto('about-me', '__:lmm.mod.aboutMe');
+LaminimModule::defineItemList('portfolio-projects', '__:lmm.mod.uri_portfolio_project', 'uri-portfolio-project', true);
 LaminimModule::defineLayout('portfolio-featured', '__:lmm.mod.portfolioFeatured', Schema::table('_', 'portfolio-featured'));
 
 // Only for CLI

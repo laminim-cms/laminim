@@ -11,6 +11,8 @@ use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Laminim;
 use Lkt\Factory\Instantiator\Instantiator;
+use Lkt\Factory\Schemas\Exceptions\DuplicatedValueException;
+use Lkt\Factory\Schemas\Exceptions\MissedMandatoryValueException;
 use Lkt\Factory\Schemas\Fields\AbstractField;
 use Lkt\Factory\Schemas\Fields\FileField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
@@ -146,13 +148,15 @@ class CmsHttp
         $r = $instance->readViewFields('create');
         $fields = $schema->getViewConfigForFields('create');
         $layout = $schema->getViewLayout('create', true);
+        $slugPattern = $schema->getSlugPattern();
 
         return Response::ok([
             'layout' => $layout,
             'fields' => $fields,
             'item' => $r,
             'maxPage' => 0,
-            'perms' => ['create', 'update', 'read', 'drop']
+            'perms' => ['create', 'update', 'read', 'drop'],
+            'slugPattern' => $slugPattern,
         ]);
     }
 
@@ -559,9 +563,15 @@ class CmsHttp
         $data = $params['data'];
         $item = Instantiator::make($decodedType, 0);
 
-        // Assign same table fields
-        $item::feedInstance($item, $data, 'create');
-        $item->save();
+        try {
+            $item::feedInstance($item, $data, 'create');
+            $item->save();
+
+        } catch (DuplicatedValueException|MissedMandatoryValueException $exception) {
+            return Response::badRequest([
+                'errorMessage' => $exception->getMessage(),
+            ]);
+        }
 
         if ($parentId > 0 && $parentComponent !== '') {
             $item->linkPivot($parentComponent, $parentId);
@@ -581,9 +591,15 @@ class CmsHttp
         $data = $params['data'];
         $item = Instantiator::make($decodedType, $id);
 
-        // Assign same table fields
-        $item::feedInstance($item, $data, 'edit');
-        $item->save();
+        try {
+            $item::feedInstance($item, $data, 'edit');
+            $item->save();
+
+        } catch (DuplicatedValueException|MissedMandatoryValueException $exception) {
+            return Response::badRequest([
+                'errorMessage' => $exception->getMessage(),
+            ]);
+        }
 
         return Response::ok([
             'item' => ['id' => $item->getId()],
@@ -611,18 +627,22 @@ class CmsHttp
         $type = clearInput($params['_lmm_type']);
         $identifier = clearInput($params['_lmm_id']);
         $decodedType = Laminim::getModuleByAlias($type);
+        $view = clearInput($params['_lmm_view']);
+        if ($view === '') $view = 'edit';
         $schema = Schema::get($decodedType);
 
         $instance = Instantiator::make($decodedType, $identifier);
-        $r = $instance->readViewFields('edit');
-        $fields = $schema->getViewConfigForFields('edit');
-        $layout = $schema->getViewLayout('edit', true);
+        $r = $instance->readViewFields($view);
+        $fields = $schema->getViewConfigForFields($view);
+        $layout = $schema->getViewLayout($view, true);
+        $slugPattern = $schema->getSlugPattern();
 
         return Response::ok([
             'layout' => $layout,
             'fields' => $fields,
             'item' => $r,
-            'perms' => ['create', 'update', 'read', 'drop']
+            'perms' => ['create', 'update', 'read', 'drop'],
+            'slugPattern' => $slugPattern
         ]);
     }
 
