@@ -676,8 +676,18 @@ class CmsHttp
         $filename = basename($file->name);
         $extension = strtolower(substr(strrchr($filename, '.'), 1));
 
-        return Response::ok($content)
+        $response = Response::ok($content)
             ->setContentTypeByFileExtension($extension)
             ->setLastModifiedHeader(filemtime($path));
+
+        if ($field->hasHttpCacheDurationInSeconds()) {
+            $httpExpiration = $field->getHttpCacheDurationInSeconds();
+            $response
+                ->setCacheControlMaxAgeHeader($httpExpiration)
+                ->setExpiresHeader($httpExpiration)
+            ;
+        }
+
+        return $response;
     }
 }
