@@ -6,6 +6,7 @@ use LaminimCMS\Instances\ModularOption;
 use LaminimCMS\Instances\MultimediaItem;
 use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\TranslationStack;
+use LaminimCMS\Instances\Visibility;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -241,6 +242,12 @@ class SeedLmmTranslationsCommand extends Command
             ['name' => MultimediaItem::TYPE_YOUTUBE, 'valueEn' => 'Youtube', 'valueEs' => 'Youtube'],
             ['name' => MultimediaItem::TYPE_VIMEO, 'valueEn' => 'Vimeo', 'valueEs' => 'Vimeo'],
             ['name' => MultimediaItem::TYPE_URL, 'valueEn' => 'URL', 'valueEs' => 'URL'],
+        ]);
+
+        Translation::ensureChoice($stack, 'visibilityChoices', [
+            ['name' => Visibility::STATUS_DRAFT, 'valueEn' => 'Draft', 'valueEs' => 'Borrador'],
+            ['name' => Visibility::STATUS_SCHEDULED, 'valueEn' => 'Scheduled', 'valueEs' => 'Programado'],
+            ['name' => Visibility::STATUS_PUBLISHED, 'valueEn' => 'Published', 'valueEs' => 'Público'],
         ]);
 
         $this->seedComponents();

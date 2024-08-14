@@ -8,6 +8,7 @@ use LaminimCMS\Instances\Metadata;
 use LaminimCMS\Instances\ModularBlock;
 use LaminimCMS\Instances\Page;
 use LaminimCMS\Instances\User;
+use LaminimCMS\Instances\Visibility;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
 use Lkt\Factory\Schemas\Fields\IdField;
@@ -75,11 +76,22 @@ return Schema::table('lmm_pages', Page::COMPONENT)
             ->configureView(FieldViewConfig::editMode('create', 'lmm-metadata'))
             ->configureView(FieldViewConfig::editMode('edit', 'lmm-metadata'))
     )
+    ->addField(
+        RelatedField::defineRelation(Visibility::COMPONENT, 'visibility', 'itemId')
+            ->setSingleMode()
+            ->setReturnsEmptyOneInSingleMode()
+            ->addRelatedComponentFeed('itemType', Page::COMPONENT)
+            ->setWhere(MetadataWhere::itemTypeEqual(Page::COMPONENT))
+            ->setLabel('__:lmm.visibility')
+            ->configureView(FieldViewConfig::editMode('create', 'lmm-visibility'))
+            ->configureView(FieldViewConfig::editMode('edit', 'lmm-visibility'))
+    )
     ->setLayout(GridLayout::define('edit', 1, [
             'name',
             GridLayout::define('main-data', 2, ['createdAt', 'createdBy']),
             'modularBlocks',
             'metadata',
+            'visibility',
         ]
     ))
     ;
