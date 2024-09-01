@@ -55,12 +55,23 @@ class User extends GeneratedUser
 
     public static function getLoggedId(): int
     {
-        return 1;
+//        return 1;
         return (int)$_SESSION['lmm-user-id'];
     }
 
     public static function getLogged(): static
     {
         return static::getInstance(static::getLoggedId());
+    }
+
+    public function getFullName(): string
+    {
+        $r = [];
+        $name = $this->getName();
+        if ($name !== '') $r[] = $name;
+        $lastname = $this->getLastName();
+        if ($lastname !== '') $r[] = $lastname;
+
+        return implode(' ', $r);
     }
 }

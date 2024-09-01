@@ -3,6 +3,7 @@
 namespace LaminimCMS\Schemas;
 
 use LaminimCMS\Instances\Metadata;
+use LaminimCMS\Instances\User;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
 use Lkt\Factory\Schemas\Fields\IdField;
@@ -24,69 +25,77 @@ return Schema::table('lmm_metadata', Metadata::COMPONENT)
     ->addField(
         IdField::define('id')
             ->setLabel('__:lmm.id')
-            ->configureView(FieldViewConfig::dataMode('index'))
-            ->configureView(FieldViewConfig::dataMode('related'))
-            ->configureView(FieldViewConfig::dataMode('edit'))
+            ->configureView(FieldViewConfig::dataMode('lmm-index'))
+            ->configureView(FieldViewConfig::dataMode('lmm-related'))
+            ->configureView(FieldViewConfig::dataMode('lmm-edit'))
     )
     ->addField(
         DateTimeField::define('createdAt', 'created_at')
             ->setLabel('__:lmm.createdAt')
-            ->setDefaultReadFormat('Y-m-d H:i:s')
             ->setCurrentTimeStampAsDefaultValue()
-            ->configureView(FieldViewConfig::readMode('edit', 'date'))
+            ->setDefaultReadFormat('d/m/Y')
+            ->setLangDefaultReadFormat('d/m/Y', 'es')
+            ->setLangDefaultReadFormat('Y-m-d', 'en')
+            ->configureView(FieldViewConfig::readMode('lmm-edit', 'date'))
+    )
+    ->addField(
+        ForeignKeyField::defineRelation(User::COMPONENT, 'createdBy', 'created_by')
+            ->setLabel('__:lmm.createdBy')
+            ->configureView(FieldViewConfig::readMode('lmm-edit', 'foreign-key'))
+            ->setDefaultValue([User::class, 'getLoggedId'])
     )
     ->addField(
         StringField::define('itemType', 'item_type')
             ->setLabel('__:lmm.itemType')
-            ->configureView(FieldViewConfig::readMode('index', 'text'))
-            ->configureView(FieldViewConfig::editMode('related', 'text'))
-            ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::readMode('lmm-index', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-related', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
     )
     ->addField(
         ForeignKeyField::define('item', 'item_id')
             ->setDynamicComponentField('itemType')
             ->setLabel('__:lmm.item')
-            ->configureView(FieldViewConfig::editMode('create', 'foreign-key'))
-            ->configureView(FieldViewConfig::editMode('edit', 'foreign-key'))
-            ->configureView(FieldViewConfig::editMode('filters', 'foreign-key'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'foreign-key'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'foreign-key'))
+            ->configureView(FieldViewConfig::editMode('lmm-filters', 'foreign-key'))
     )
     ->addField(
         StringField::define('title')
             ->setLabel('__:lmm.title')
-            ->configureView(FieldViewConfig::readMode('index', 'text'))
-            ->configureView(FieldViewConfig::editMode('filters', 'text'))
-            ->configureView(FieldViewConfig::editMode('related', 'text'))
-            ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::readMode('lmm-index', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-filters', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-related', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
     )
     ->addField(
         StringField::define('description')
             ->setLabel('__:lmm.description')
-            ->configureView(FieldViewConfig::readMode('index', 'text'))
-            ->configureView(FieldViewConfig::editMode('related', 'text'))
-            ->configureView(FieldViewConfig::editMode('filters', 'textarea'))
-            ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::readMode('lmm-index', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-related', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-filters', 'textarea'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
     )
     ->addField(
         StringField::define('keywords')
             ->setLabel('__:lmm.keywords')
-            ->configureView(FieldViewConfig::readMode('index', 'text'))
-            ->configureView(FieldViewConfig::editMode('related', 'textarea'))
-            ->configureView(FieldViewConfig::editMode('filters', 'text'))
-            ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::readMode('lmm-index', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-related', 'textarea'))
+            ->configureView(FieldViewConfig::editMode('lmm-filters', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
     )
     ->addField(
         StringField::define('url')
             ->setLabel('__:lmm.url')
-            ->configureView(FieldViewConfig::editMode('related', 'text'))
-            ->configureView(FieldViewConfig::dataMode('create', 'text'))
-            ->configureView(FieldViewConfig::dataMode('edit', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-related', 'text'))
+            ->configureView(FieldViewConfig::dataMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::dataMode('lmm-edit', 'text'))
     )
     ->setLayout(
-        GridLayout::define('create', 1, [
+        GridLayout::define('lmm-create', 1, [
                 GridLayout::define('main-data', 1, [
                     GridLayout::define('main-data', 2, ['name', 'type']),
                 ]),
@@ -99,10 +108,10 @@ return Schema::table('lmm_metadata', Metadata::COMPONENT)
                     'createdBy' => 'data',
                 ]),
             ]
-        ), ['edit']
+        ), ['lmm-edit']
     )
     ->setLayout(
-        GridLayout::define('filters', 2, [
+        GridLayout::define('lmm-filters', 2, [
                 'name', 'type'
             ]
         )

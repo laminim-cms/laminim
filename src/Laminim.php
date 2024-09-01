@@ -62,18 +62,27 @@ class Laminim
         GetRoute::register('/laminim/app.js', [CmsHttp::class, 'publicAppJs']);
         GetRoute::register('/laminim/app.css', [CmsHttp::class, 'publicAppCss']);
 
+        // Load routes
+        GetRoute::register('/laminim/load/i18n', [CmsHttp::class, 'loadI18n']);
+        GetRoute::register('/laminim/load/modules', [CmsHttp::class, 'loadModules']);
+        GetRoute::register('/laminim/load/menu', [CmsHttp::class, 'loadMenu']);
+        PostRoute::register('/laminim/sing-up', [CmsHttp::class, 'singUp']);
+        PostRoute::register('/laminim/login', [CmsHttp::class, 'login']);
+        PostRoute::register('/laminim/logout', [CmsHttp::class, 'logout']);
+
         // View routes
-        GetRoute::register('/laminim/ls/{_lmm_type}', [CmsHttp::class, 'indexHTML']);
-        GetRoute::register('/laminim/new/{_lmm_type}', [CmsHttp::class, 'indexHTML']);
-        GetRoute::register('/laminim/edit/{_lmm_type}/{id}', [CmsHttp::class, 'indexHTML']);
+        GetRoute::register('/laminim', [CmsHttp::class, 'indexHTML']);
+        GetRoute::register('/laminim/{_lmm_type}', [CmsHttp::class, 'indexHTML']);
+        GetRoute::register('/laminim/{_lmm_type}/new', [CmsHttp::class, 'indexHTML']);
+        GetRoute::register('/laminim/{_lmm_type}/config', [CmsHttp::class, 'getContentConfig']);
+        GetRoute::register('/laminim/{_lmm_type}/index', [CmsHttp::class, 'indexItems']);
+        GetRoute::register('/laminim/{_lmm_type}/options', [CmsHttp::class, 'optionItems']);
+        GetRoute::register('/laminim/{_lmm_type}/metadata-slug', [CmsHttp::class, 'validateMetadataSlug']);
+        GetRoute::register('/laminim/{_lmm_type}/{id}', [CmsHttp::class, 'indexHTML']);
         GetRoute::register('/laminim/open/{_lmm_type}/{field}/{id}', [CmsHttp::class, 'openItemField']);
 
         // CRUD routes
-        GetRoute::register('/laminim/{_lmm_type}/config', [CmsHttp::class, 'getContentConfig']);
-        GetRoute::register('/laminim/{_lmm_type}/index', [CmsHttp::class, 'indexItems']);
-        GetRoute::register('/laminim/{_lmm_type}/metadata-slug', [CmsHttp::class, 'validateMetadataSlug']);
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_own_type}/{_lmm_field}/index', [CmsHttp::class, 'indexForField']);
-        GetRoute::register('/laminim/{_lmm_type}/options', [CmsHttp::class, 'optionItems']);
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_id}/read', [CmsHttp::class, 'readItem']);
         PostRoute::register('/laminim/{_lmm_type}/create', [CmsHttp::class, 'createItem']);
         PutRoute::register('/laminim/{_lmm_type}/{id}/update', [CmsHttp::class, 'updateItem']);
@@ -83,12 +92,7 @@ class Laminim
         GetRoute::register('/laminim/{_lmm_type}/{_lmm_id}/pivot/{_lmm_field}/available', [CmsHttp::class, 'availablePivotItems']);
         PutRoute::register('/laminim/{_lmm_type}/{_lmm_id}/pivot/{_lmm_field}/store', [CmsHttp::class, 'storePivotItems']);
 
-        // Load routes
-        GetRoute::register('/laminim/load/i18n', [CmsHttp::class, 'loadI18n']);
-        GetRoute::register('/laminim/load/modules', [CmsHttp::class, 'loadModules']);
-        GetRoute::register('/laminim/load/menu', [CmsHttp::class, 'loadMenu']);
-
         // Wildcard at the end (catch all)
-        GetRoute::register('/laminim[/{path}]', [CmsHttp::class, 'indexHTML']);
+//        GetRoute::register('/laminim[/{path}]', [CmsHttp::class, 'indexHTML']);
     }
 }

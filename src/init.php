@@ -28,14 +28,14 @@ Schema::add(require_once "Schemas/laminim-visibility.php");
 
 // Load menu
 LaminimMenuEntry::register(
-    LaminimMenuEntry::define('pages', '/laminim/ls/page', '__:components.page.many', 'icon-stickies')
+    LaminimMenuEntry::define('pages', '/laminim/page', '__:components.page.many', 'icon-stickies')
 );
 
 LaminimMenuEntry::register(
     LaminimMenuEntry::define('users', '', '__:components.user.many', 'icon-users-cog')
         ->setChildren([
-                LaminimMenuEntry::define('users-users', '/laminim/ls/user', '__:components.user.many', 'icon-users-cog'),
-                LaminimMenuEntry::define('users-roles', '/laminim/ls/role', '__:components.role.many', 'icon-users-cog'),
+                LaminimMenuEntry::define('users-users', '/laminim/user', '__:components.user.many', 'icon-users-cog'),
+                LaminimMenuEntry::define('users-roles', '/laminim/role', '__:components.role.many', 'icon-users-cog'),
             ]
         )
 );
@@ -43,14 +43,14 @@ LaminimMenuEntry::register(
 LaminimMenuEntry::register(
     LaminimMenuEntry::define('i18n', '', '__:components.i18n.many', 'icon-globe')
         ->setChildren([
-                LaminimMenuEntry::define('i18n-i18n', '/laminim/ls/i18n', '__:components.i18n.many', 'icon-globe'),
-                LaminimMenuEntry::define('i18n-stack', '/laminim/ls/i18n-stack', '__:components.i18n-stack.many', 'icon-globe'),
+                LaminimMenuEntry::define('i18n-i18n', '/laminim/i18n', '__:components.i18n.many', 'icon-globe'),
+                LaminimMenuEntry::define('i18n-stack', '/laminim/i18n-stack', '__:components.i18n-stack.many', 'icon-globe'),
             ]
         )
 );
 
 LaminimMenuEntry::register(
-    LaminimMenuEntry::define('files', '/laminim/ls/multimedia', '__:components.multimedia.many', 'icon-folder')
+    LaminimMenuEntry::define('files', '/laminim/multimedia', '__:components.multimedia.many', 'icon-folder')
 );
 
 // Setup permissions

@@ -40,12 +40,22 @@ class CmsHttp
 
     public static function publicAppJs(): Response
     {
+        $user = User::getLogged();
+        if ($user->isAnonymous()) {
+            return Response::ok(Template::file(__DIR__ . '/../../interface-public/dist/assets/index.js'))
+                ->setContentTypeByFileExtension('js');
+        }
         return Response::ok(Template::file(__DIR__ . '/../../interface/dist/assets/index.js'))
             ->setContentTypeByFileExtension('js');
     }
 
     public static function publicAppCss(): Response
     {
+        $user = User::getLogged();
+        if ($user->isAnonymous()) {
+            return Response::ok(Template::file(__DIR__ . '/../../interface-public/dist/assets/index.css'))
+                ->setContentTypeByFileExtension('css');
+        }
         return Response::ok(Template::file(__DIR__ . '/../../interface/dist/assets/index.css'))
             ->setContentTypeByFileExtension('css');
     }
@@ -121,6 +131,67 @@ class CmsHttp
         ]);
     }
 
+    public static function singUp($params = []): Response
+    {
+        $user = clearInput($params['user']);
+        $password = clearInput($params['password']);
+
+        $query = User::getQueryCaller()
+            ->andEmailEqual($user)
+            ->andPasswordEqual($password);
+
+        $ins = User::getOne($query);
+
+        if ($ins instanceof User) {
+            return Response::forbidden([]);
+        }
+        $ins = User::getInstance();
+        $ins::feedInstance($ins, [
+            'email' => $user,
+            'password' => $password
+        ]);
+        $ins->save();
+        $ins->logIn();
+        return Response::ok([
+            'redirect' => '/laminim'
+        ]);
+    }
+
+    public static function login($params = []): Response
+    {
+        $user = clearInput($params['user']);
+        $password = clearInput($params['password']);
+
+        $query = User::getQueryCaller()
+            ->andEmailEqual($user)
+            ->andPasswordEqual($password);
+
+        $ins = User::getOne($query);
+
+        if ($ins instanceof User) {
+            $ins->logIn();
+            return Response::ok([
+                'redirect' => '/laminim'
+            ]);
+        }
+
+        return Response::forbidden([]);
+    }
+
+    public static function logout($params = []): Response
+    {
+        $ins = User::getLogged();
+
+        if ($ins instanceof User) {
+            $ins->logOut();
+            return Response::ok([
+                'redirect' => '/laminim'
+            ]);
+        }
+
+        return Response::forbidden([]);
+    }
+
     public static function getContentConfig($params = []): Response
     {
         $type = clearInput($params['_lmm_type']);
@@ -145,9 +216,9 @@ class CmsHttp
                 $instance->$setter($parentId);
             }
         }
-        $r = $instance->readViewFields('create');
-        $fields = $schema->getViewConfigForFields('create');
-        $layout = $schema->getViewLayout('create', true);
+        $r = $instance->readViewFields('lmm-create');
+        $fields = $schema->getViewConfigForFields('lmm-create');
+        $layout = $schema->getViewLayout('lmm-create', true);
         $slugPattern = $schema->getSlugPattern();
 
         return Response::ok([
@@ -165,9 +236,9 @@ class CmsHttp
         $itemsPerPage = (int)clearInput($params['_lmm_items_per_page']);
         $type = clearInput($params['_lmm_type']);
         $view = clearInput($params['_lmm_view']);
-        if ($view === '') $view = 'index';
+        if ($view === '') $view = 'lmm-index';
         $viewFilters = clearInput($params['_lmm_view_filters']);
-        if ($viewFilters === '') $viewFilters = 'filters';
+        if ($viewFilters === '') $viewFilters = 'lmm-filters';
         $filters = $params['_lmm_filters'];
         if (is_string($filters)) {
             $filters = json_decode($filters, true);
@@ -303,7 +374,7 @@ class CmsHttp
             $query->andRaw(implode(' AND ', $where));
         }
 
-        $filtersFieldsObjs = $schema->getViewFields('filters');
+        $filtersFieldsObjs = $schema->getViewFields('lmm-filters');
         foreach ($filters as $filter => $value) {
             $field = $filtersFieldsObjs[$filter];
             if (!is_object($field)) $field = $schema->getField($filter);
@@ -322,11 +393,11 @@ class CmsHttp
         $maxPage = $anonymous::getAmountOfPages($query);
 
         $r = [];
-        foreach ($results as $result) $r[] = $result->readViewFields('index');
+        foreach ($results as $result) $r[] = $result->readViewFields('lmm-index');
 
-        $fields = $schema->getViewConfigForFields('index');
-        $layout = $schema->getViewLayout('filters', true);
-        $filtersFields = $schema->getViewConfigForFields('filters');
+        $fields = $schema->getViewConfigForFields('lmm-index');
+        $layout = $schema->getViewLayout('lmm-filters', true);
+        $filtersFields = $schema->getViewConfigForFields('lmm-filters');
 
         return Response::ok([
             'filtersLayout' => $layout,
@@ -361,7 +432,7 @@ class CmsHttp
 
 
 
-        $filtersFieldsObjs = $schema->getViewFields('filters');
+        $filtersFieldsObjs = $schema->getViewFields('lmm-filters');
         foreach ($filters as $filter => $value) {
             $field = $filtersFieldsObjs[$filter];
             if (!is_object($field)) continue;
@@ -378,11 +449,11 @@ class CmsHttp
         $maxPage = $anonymous::getAmountOfPages($query);
 
         $r = [];
-        foreach ($results as $result) $r[] = $result->readViewFields('index');
+        foreach ($results as $result) $r[] = $result->readViewFields('lmm-index');
 
-        $fields = $schema->getViewConfigForFields('index');
-        $layout = $schema->getViewLayout('filters', true);
-        $filtersFields = $schema->getViewConfigForFields('filters');
+        $fields = $schema->getViewConfigForFields('lmm-index');
+        $layout = $schema->getViewLayout('lmm-filters', true);
+        $filtersFields = $schema->getViewConfigForFields('lmm-filters');
 
         return Response::ok([
             'filtersLayout' => $layout,
@@ -418,7 +489,7 @@ class CmsHttp
 
 
 
-        $filtersFieldsObjs = $schema->getViewFields('filters');
+        $filtersFieldsObjs = $schema->getViewFields('lmm-filters');
         foreach ($filters as $filter => $value) {
             $field = $filtersFieldsObjs[$filter];
             if (!is_object($field)) continue;
@@ -435,11 +506,11 @@ class CmsHttp
         $maxPage = $anonymous::getAmountOfPages($query);
 
         $r = [];
-        foreach ($results as $result) $r[] = $result->readViewFields('related');
+        foreach ($results as $result) $r[] = $result->readViewFields('lmm-related');
 
-        $fields = $schema->getViewConfigForFields('related');
-        $layout = $schema->getViewLayout('filters', true);
-        $filtersFields = $schema->getViewConfigForFields('filters');
+        $fields = $schema->getViewConfigForFields('lmm-related');
+        $layout = $schema->getViewLayout('lmm-filters', true);
+        $filtersFields = $schema->getViewConfigForFields('lmm-filters');
 
         return Response::ok([
             'filtersLayout' => $layout,
@@ -472,7 +543,7 @@ class CmsHttp
         $query = $fromAnonymous->_getAvailablePivotQueryBuilder($fieldName);
 
 
-        $filtersFieldsObjs = $schema->getViewFields('filters');
+        $filtersFieldsObjs = $schema->getViewFields('lmm-filters');
         foreach ($filters as $filter => $value) {
             $field = $filtersFieldsObjs[$filter];
             if (!is_object($field)) continue;
@@ -489,11 +560,11 @@ class CmsHttp
         $maxPage = $anonymous::getAmountOfPages($query);
 
         $r = [];
-        foreach ($results as $result) $r[] = $result->readViewFields('related');
+        foreach ($results as $result) $r[] = $result->readViewFields('lmm-related');
 
-        $fields = $schema->getViewConfigForFields('related');
-        $layout = $schema->getViewLayout('filters', true);
-        $filtersFields = $schema->getViewConfigForFields('filters');
+        $fields = $schema->getViewConfigForFields('lmm-related');
+        $layout = $schema->getViewLayout('lmm-filters', true);
+        $filtersFields = $schema->getViewConfigForFields('lmm-filters');
 
         return Response::ok([
             'filtersLayout' => $layout,
@@ -543,7 +614,7 @@ class CmsHttp
         $r = [];
         foreach ($results as $result) $r[] = $result->readAsRelated();
 
-        $fields = $schema->getViewConfigForFields('index');
+        $fields = $schema->getViewConfigForFields('lmm-index');
 
         return Response::ok([
             'fields' => $fields,
@@ -564,7 +635,7 @@ class CmsHttp
         $item = Instantiator::make($decodedType, 0);
 
         try {
-            $item::feedInstance($item, $data, 'create');
+            $item::feedInstance($item, $data, 'lmm-create');
             $item->save();
 
         } catch (DuplicatedValueException|MissedMandatoryValueException $exception) {
@@ -592,7 +663,7 @@ class CmsHttp
         $item = Instantiator::make($decodedType, $id);
 
         try {
-            $item::feedInstance($item, $data, 'edit');
+            $item::feedInstance($item, $data, 'lmm-edit');
             $item->save();
 
         } catch (DuplicatedValueException|MissedMandatoryValueException $exception) {
@@ -628,7 +699,7 @@ class CmsHttp
         $identifier = clearInput($params['_lmm_id']);
         $decodedType = Laminim::getModuleByAlias($type);
         $view = clearInput($params['_lmm_view']);
-        if ($view === '') $view = 'edit';
+        if ($view === '') $view = 'lmm-edit';
         $schema = Schema::get($decodedType);
 
         $instance = Instantiator::make($decodedType, $identifier);

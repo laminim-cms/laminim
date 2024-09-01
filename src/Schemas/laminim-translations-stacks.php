@@ -25,39 +25,39 @@ return Schema::table('lmm_i18n_stacks', TranslationStack::COMPONENT)
     ->addField(
         IdField::define('id')
             ->setLabel('__:lmm.id')
-            ->configureView(FieldViewConfig::dataMode('index'))
-            ->configureView(FieldViewConfig::dataMode('edit'))
+            ->configureView(FieldViewConfig::dataMode('lmm-index'))
+            ->configureView(FieldViewConfig::dataMode('lmm-edit'))
     )
     ->addField(
         StringField::define('name')
             ->setLabel('__:lmm.name')
-            ->configureView(FieldViewConfig::readMode('index'))
-            ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::readMode('lmm-index'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
     )
     ->addField(
         StringField::define('property')
             ->setLabel('__:lmm.property')
-            ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
     )
     ->addField(
         BooleanField::define('requiredAdminPerms', 'required_admin_perms')
             ->setLabel('__:lmm.requiredAdminPerms')
-            ->configureView(FieldViewConfig::editMode('create', 'switch'))
-            ->configureView(FieldViewConfig::editMode('edit', 'switch'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'switch'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'switch'))
     )
     ->addField(
         BooleanField::define('onlyForCms', 'only_for_cms')
             ->setLabel('__:lmm.onlyForCms')
-            ->configureView(FieldViewConfig::editMode('create', 'switch'))
-            ->configureView(FieldViewConfig::editMode('edit', 'switch'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'switch'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'switch'))
     )
     ->setLayout(
-        GridLayout::define('create', 1, [
+        GridLayout::define('lmm-create', 1, [
                 GridLayout::define('main-data', 2, ['name', 'property', 'requiredAdminPerms', 'onlyForCms']),
             ]
         )
         ,
-        ['edit']
+        ['lmm-edit']
     );

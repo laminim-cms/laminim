@@ -3,8 +3,10 @@
 namespace LaminimCMS\Schemas;
 
 use LaminimCMS\Instances\ModularContent;
+use LaminimCMS\Instances\User;
 use Lkt\Factory\Schemas\Fields\AssocJSONField;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
+use Lkt\Factory\Schemas\Fields\ForeignKeyField;
 use Lkt\Factory\Schemas\Fields\IdField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\Fields\ValueListField;
@@ -23,14 +25,24 @@ return Schema::table('lmm_modular_content', ModularContent::COMPONENT)
     ->setFieldsForRelatedMode('', '', ['id', 'type', 'items'])
     ->addField(
         IdField::define('id')
-            ->configureView(FieldViewConfig::dataMode('related', 'text'))
+            ->configureView(FieldViewConfig::dataMode('lmm-related', 'text'))
     )
     ->addField(
         StringField::define('type')
-            ->configureView(FieldViewConfig::readMode('related', 'text'))
+            ->configureView(FieldViewConfig::readMode('lmm-related', 'text'))
     )
     ->addField(DateTimeField::define('createdAt', 'created_at')
-        ->setCurrentTimeStampAsDefaultValue())
+        ->setCurrentTimeStampAsDefaultValue()
+        ->setDefaultReadFormat('d/m/Y')
+        ->setLangDefaultReadFormat('d/m/Y', 'es')
+        ->setLangDefaultReadFormat('Y-m-d', 'en')
+    )
+    ->addField(
+        ForeignKeyField::defineRelation(User::COMPONENT, 'createdBy', 'created_by')
+            ->setLabel('__:lmm.createdBy')
+            ->configureView(FieldViewConfig::readMode('lmm-edit', 'foreign-key'))
+            ->setDefaultValue([User::class, 'getLoggedId'])
+    )
     ->addField(
         AssocJSONField::define('breakpoints')
     )
@@ -40,6 +52,6 @@ return Schema::table('lmm_modular_content', ModularContent::COMPONENT)
     ->addField(
         ValueListField::define('items')
             ->setReadModeToArray()
-            ->configureView(FieldViewConfig::editMode('related', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-related', 'text'))
     )
     ;

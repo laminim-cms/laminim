@@ -26,57 +26,59 @@ return Schema::table('lmm_visibility', Visibility::COMPONENT)
     ->addField(
         IdField::define('id')
             ->setLabel('__:lmm.id')
-            ->configureView(FieldViewConfig::dataMode('index'))
-            ->configureView(FieldViewConfig::dataMode('related'))
-            ->configureView(FieldViewConfig::dataMode('edit'))
+            ->configureView(FieldViewConfig::dataMode('lmm-index'))
+            ->configureView(FieldViewConfig::dataMode('lmm-related'))
+            ->configureView(FieldViewConfig::dataMode('lmm-edit'))
     )
     ->addField(
         DateTimeField::define('createdAt', 'created_at')
             ->setLabel('__:lmm.createdAt')
-            ->setDefaultReadFormat('Y-m-d H:i:s')
             ->setCurrentTimeStampAsDefaultValue()
-            ->configureView(FieldViewConfig::readMode('edit', 'date'))
+            ->setDefaultReadFormat('d/m/Y')
+            ->setLangDefaultReadFormat('d/m/Y', 'es')
+            ->setLangDefaultReadFormat('Y-m-d', 'en')
+            ->configureView(FieldViewConfig::readMode('lmm-edit', 'date'))
     )
     ->addField(
         DateTimeField::define('autoPublishAt', 'auto_publish_at')
             ->setLabel('__:lmm.autoPublishAt')
             ->setDefaultReadFormat('Y-m-d H:i:s')
             ->setCurrentTimeStampAsDefaultValue()
-            ->configureView(FieldViewConfig::readMode('edit', 'date'))
+            ->configureView(FieldViewConfig::readMode('lmm-edit', 'date'))
     )
     ->addField(
         StringField::define('itemType', 'item_type')
             ->setLabel('__:lmm.itemType')
-            ->configureView(FieldViewConfig::readMode('index', 'text'))
-            ->configureView(FieldViewConfig::editMode('related', 'text'))
-            ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::readMode('lmm-index', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-related', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
     )
     ->addField(
         ForeignKeyField::define('item', 'item_id')
             ->setDynamicComponentField('itemType')
             ->setLabel('__:lmm.item')
-            ->configureView(FieldViewConfig::editMode('create', 'foreign-key'))
-            ->configureView(FieldViewConfig::editMode('edit', 'foreign-key'))
-            ->configureView(FieldViewConfig::editMode('filters', 'foreign-key'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'foreign-key'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'foreign-key'))
+            ->configureView(FieldViewConfig::editMode('lmm-filters', 'foreign-key'))
     )
     ->addField(
         StringChoiceField::choice(Visibility::STATUSES, 'status')
             ->setDefaultValue(Visibility::STATUS_PUBLISHED)
             ->setLabel('__:lmm.status')
-            ->configureView(FieldViewConfig::readMode('index', 'text'))
-            ->configureView(FieldViewConfig::editMode('filters', 'text'))
-            ->configureView(FieldViewConfig::editMode('related', 'text'))
-            ->configureView(FieldViewConfig::editMode('create', 'text'))
-            ->configureView(FieldViewConfig::editMode('edit', 'text'))
+            ->configureView(FieldViewConfig::readMode('lmm-index', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-filters', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-related', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
     )
     ->setLayout(
-        GridLayout::define('create', 1, [
+        GridLayout::define('lmm-create', 1, [
             ]
-        ), ['edit']
+        ), ['lmm-edit']
     )
     ->setLayout(
-        GridLayout::define('filters', 2, [
+        GridLayout::define('lmm-filters', 2, [
                 'name', 'type'
             ]
         )

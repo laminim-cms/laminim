@@ -72,4 +72,16 @@ class Translation extends GeneratedTranslation
             ->save()
         ;
     }
+
+    public function getDisplayName(): string
+    {
+        $r = [];
+        $name = $this->getStack()?->getProperty();
+        if ($name !== '') $r[] = $name;
+
+        $lastname = $this->getProperty();
+        if ($lastname !== '') $r[] = $lastname;
+
+        return implode('.', $r);
+    }
 }

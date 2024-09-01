@@ -10,6 +10,7 @@ class LaminimVisibility00000101000009 extends AbstractMigration
         $this
             ->table('lmm_visibility', ['collation' => 'utf8_general_ci'])
             ->addColumn('created_at', 'datetime', ['null' => true, 'default' => 'CURRENT_TIMESTAMP'])
+            ->addColumn('created_by', 'integer', ['default' => 0])
 
             ->addColumn('item_id', 'integer', ['default' => 0])
             ->addColumn('item_type', 'string', ['limit' => 100, 'default' => ''])

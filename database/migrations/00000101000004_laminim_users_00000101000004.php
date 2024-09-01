@@ -10,6 +10,7 @@ class LaminimUsers00000101000004 extends AbstractMigration
         $this
             ->table('lmm_user_roles', ['collation' => 'utf8_general_ci'])
             ->addColumn('created_at', 'datetime', ['null' => true, 'default' => 'CURRENT_TIMESTAMP'])
+            ->addColumn('created_by', 'integer', ['default' => 0])
             ->addColumn('name', 'string', ['limit' => 255, 'default' => ''])
             ->addColumn('has_cms_access', 'boolean', ['default' => false])
             ->addColumn('has_admin_access', 'boolean', ['default' => false])
@@ -19,6 +20,8 @@ class LaminimUsers00000101000004 extends AbstractMigration
         $this
             ->table('lmm_users', ['collation' => 'utf8_general_ci'])
             ->addColumn('created_at', 'datetime', ['null' => true, 'default' => 'CURRENT_TIMESTAMP'])
+            ->addColumn('created_by', 'integer', ['default' => 0])
+            ->addColumn('photo_id', 'integer', ['default' => 0])
             ->addColumn('name', 'string', ['limit' => 255, 'default' => ''])
             ->addColumn('lastname', 'string', ['limit' => 255, 'default' => ''])
             ->addColumn('email', 'string', ['limit' => 255, 'default' => ''])
