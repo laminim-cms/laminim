@@ -54,16 +54,10 @@ LaminimMenuEntry::register(
 );
 
 // Setup permissions
-Permission::enableComponentPermission(Page::COMPONENT, 'create');
-Permission::enableComponentPermission(Page::COMPONENT, 'read');
-Permission::enableComponentPermission(Page::COMPONENT, 'update');
-Permission::enableComponentPermission(Page::COMPONENT, 'drop');
+Permission::enableComponentCrudPermission(Page::COMPONENT);
 Permission::enableComponentPermission(Page::COMPONENT, 'admin');
 
-Permission::enableComponentPermission(User::COMPONENT, 'create');
-Permission::enableComponentPermission(User::COMPONENT, 'read');
-Permission::enableComponentPermission(User::COMPONENT, 'update');
-Permission::enableComponentPermission(User::COMPONENT, 'drop');
+Permission::enableComponentCrudPermission(User::COMPONENT);
 Permission::enableComponentPermission(User::COMPONENT, 'admin');
 
 LaminimModule::defineAuto('about-me', '__:lmm.mod.aboutMe');

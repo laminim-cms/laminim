@@ -5,9 +5,7 @@ namespace LaminimCMS\Http;
 use chillerlan\Filereader\File;
 use LaminimCMS\Config\LaminimMenuEntry;
 use LaminimCMS\Config\LaminimModule;
-use LaminimCMS\Generated\MetadataWhere;
 use LaminimCMS\Instances\Metadata;
-use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Laminim;
 use Lkt\Factory\Instantiator\Instantiator;
@@ -23,7 +21,6 @@ use Lkt\Factory\Schemas\Fields\StringChoiceField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\Schema;
 use Lkt\Http\Response;
-use Lkt\Locale\Enums\LangCode;
 use Lkt\Locale\Locale;
 use Lkt\Templates\Template;
 use Lkt\Translations\Translations;
@@ -62,56 +59,8 @@ class CmsHttp
 
     public static function loadI18n($params = []): Response
     {
-        $user = User::getLogged();
-        $lang = 'es';
-//        $lang = $user->getLanguage();
-//        if ($user->isAnonymous()) {
-//            $language = clearInput($params['language']);
-//            $lang = match ($language) {
-//                'es-ES' => LangCode::Spanish,
-//                default => LangCode::English
-//            };
-//        }
-
-        $query = Translation::getQueryCaller();
-        $results = Translation::getMany($query);
-
-        $r = [];
-        foreach ($results as $result) {
-            $key = [];
-            if ($result->hasStack()) $key[] = $result->getStack()?->getProperty();
-            if ($result->hasProperty()) $key[] = $result->getProperty();
-
-            $key = implode('.', $key);
-            if ($result->typeIsChoice()) {
-
-                $temp = [];
-                foreach ($result->getModularOptions() as $modularOption) {
-                    $temp[$modularOption->getName()] = $modularOption->getValue();
-                }
-
-                $r[$key] = $temp;
-            } else {
-
-                $r[$key] = $result->getValue();
-            }
-        }
-
-        function assignArrayByPath(&$arr, $path, $value, $separator='.') {
-            $keys = explode($separator, $path);
-
-            foreach ($keys as $key) {
-                $arr = &$arr[$key];
-            }
-
-            $arr = $value;
-        }
-
-        $response = [];
-        foreach ($r as $key => $value) {
-            assignArrayByPath($response, $key, $value);
-        }
-
+        Laminim::loadI18n();
+        $response = Translations::getLangTranslations(Locale::getLangCode());
         return Response::ok([
             'data' => $response
         ]);
@@ -148,7 +97,7 @@ class CmsHttp
         $ins = User::getInstance();
         $ins::feedInstance($ins, [
             'email' => $user,
-            'password' => $password
+            'password' => $password,
         ]);
         $ins->save();
         $ins->logIn();
@@ -163,6 +112,7 @@ class CmsHttp
         $password = clearInput($params['password']);
 
         $query = User::getQueryCaller()
+            ->andStatusIsActive()
             ->andEmailEqual($user)
             ->andPasswordEqual($password);
 

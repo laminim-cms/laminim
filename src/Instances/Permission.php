@@ -18,6 +18,14 @@ class Permission
         static::$enabledPerms[$component][] = $perm;
     }
 
+    public static function enableComponentCrudPermission(string $component)
+    {
+        static::enableComponentPermission($component, 'create');
+        static::enableComponentPermission($component, 'read');
+        static::enableComponentPermission($component, 'update');
+        static::enableComponentPermission($component, 'drop');
+    }
+
     public static function getComponentPermissions(string $component)
     {
         if (!is_array(static::$enabledPerms[$component])) static::$enabledPerms[$component] = [];

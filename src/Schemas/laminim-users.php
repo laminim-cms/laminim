@@ -14,6 +14,7 @@ use Lkt\Factory\Schemas\Fields\ForeignKeyField;
 use Lkt\Factory\Schemas\Fields\ForeignKeysField;
 use Lkt\Factory\Schemas\Fields\IdField;
 use Lkt\Factory\Schemas\Fields\MethodGetterField;
+use Lkt\Factory\Schemas\Fields\StringChoiceField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
@@ -74,6 +75,15 @@ return Schema::table('lmm_users', User::COMPONENT)
             ->configureView(FieldViewConfig::readMode('lmm-index', 'text'))
     )
     ->addField(
+        StringChoiceField::choice(User::STATUSES, 'status')
+            ->setIsMandatory()
+            ->setLabel('__:lmm.status')
+            ->configureView(FieldViewConfig::readMode('lmm-index', 'i18n-choice'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'i18n-choice'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'i18n-choice'))
+            ->setI18nViewOptions('lmm.userStatus')
+    )
+    ->addField(
         EmailField::define('email')
             ->setLabel('__:lmm.email')
             ->configureView(FieldViewConfig::readMode('lmm-index', 'email'))
@@ -119,8 +129,11 @@ return Schema::table('lmm_users', User::COMPONENT)
     )
     ->setLayout(
         GridLayout::define('lmm-create', 1, [
-                GridLayout::define('main-data', 2, ['name', 'lastName', 'email', 'password']),
-                'assignedRoles',
+                GridLayout::define('main-data', 2, [
+                    'name', 'lastName', 'email', 'password',
+                    'status',
+                    'assignedRoles',
+                ]),
                 'photo',
                 'hasCustomPermissionsEnabled',
                 'customPermissions',
@@ -132,8 +145,11 @@ return Schema::table('lmm_users', User::COMPONENT)
     ->setLayout(
         GridLayout::define('lmm-edit', 1, [
                 'createdAt',
-                GridLayout::define('main-data', 2, ['name', 'lastName', 'email', 'password']),
-                'assignedRoles',
+                GridLayout::define('main-data', 2, [
+                    'name', 'lastName', 'email', 'password',
+                    'status',
+                    'assignedRoles',
+                ]),
                 'photo',
                 'hasCustomPermissionsEnabled',
                 'customPermissions',

@@ -9,11 +9,12 @@ use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\TranslationStack;
 use LaminimCMS\Instances\User;
 use LaminimCMS\Instances\UserRole;
-use Lkt\Factory\Schemas\Schema;
 use Lkt\Http\Routes\DeleteRoute;
 use Lkt\Http\Routes\GetRoute;
 use Lkt\Http\Routes\PostRoute;
 use Lkt\Http\Routes\PutRoute;
+use Lkt\Locale\Locale;
+use Lkt\Translations\Translations;
 
 class Laminim
 {
@@ -54,6 +55,52 @@ class Laminim
     public static function getAvailableModularTypes(): array
     {
         return array_keys(static::$modules);
+    }
+
+    public static function loadI18n()
+    {
+        $query = Translation::getQueryCaller();
+        $results = Translation::getMany($query);
+
+        $r = [];
+        foreach ($results as $result) {
+            $key = [];
+            if ($result->hasStack()) $key[] = $result->getStack()?->getProperty();
+            if ($result->hasProperty()) $key[] = $result->getProperty();
+
+            $key = implode('.', $key);
+            if ($result->typeIsChoice()) {
+
+                $temp = [];
+                foreach ($result->getModularOptions() as $modularOption) {
+                    $temp[$modularOption->getName()] = $modularOption->getValue();
+                }
+
+                $r[$key] = $temp;
+            } else {
+
+                $r[$key] = $result->getValue();
+            }
+        }
+
+        if (!function_exists('LaminimCMS\assignArrayByPath')) {
+            function assignArrayByPath(&$arr, $path, $value, $separator='.') {
+                $keys = explode($separator, $path);
+
+                foreach ($keys as $key) {
+                    $arr = &$arr[$key];
+                }
+
+                $arr = $value;
+            }
+        }
+
+        $response = [];
+        foreach ($r as $key => $value) {
+            assignArrayByPath($response, $key, $value);
+        }
+
+        Translations::setLangTranslations(Locale::getLangCode(), $response);
     }
 
     public static function setup()

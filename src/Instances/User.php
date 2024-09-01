@@ -8,6 +8,16 @@ class User extends GeneratedUser
 {
     const COMPONENT = 'lmm-user';
 
+    const STATUS_ACTIVE = 'active';
+    const STATUS_INACTIVE = 'inactive';
+    const STATUS_BANNED = 'banned';
+
+    const STATUSES = [
+        self::STATUS_ACTIVE,
+        self::STATUS_INACTIVE,
+        self::STATUS_BANNED,
+    ];
+
     public function getPreparedCustomPermissions(): array
     {
         $currentConfig = $this->getCustomPermissions();

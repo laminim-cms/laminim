@@ -6,6 +6,7 @@ use LaminimCMS\Instances\ModularOption;
 use LaminimCMS\Instances\MultimediaItem;
 use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\TranslationStack;
+use LaminimCMS\Instances\User;
 use LaminimCMS\Instances\Visibility;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -248,6 +249,12 @@ class SeedLmmTranslationsCommand extends Command
             ['name' => Visibility::STATUS_DRAFT, 'valueEn' => 'Draft', 'valueEs' => 'Borrador'],
             ['name' => Visibility::STATUS_SCHEDULED, 'valueEn' => 'Scheduled', 'valueEs' => 'Programado'],
             ['name' => Visibility::STATUS_PUBLISHED, 'valueEn' => 'Published', 'valueEs' => 'Público'],
+        ]);
+
+        Translation::ensureChoice($stack, 'userStatus', [
+            ['name' => User::STATUS_ACTIVE, 'valueEn' => 'Active', 'valueEs' => 'Activo'],
+            ['name' => User::STATUS_INACTIVE, 'valueEn' => 'Inactive', 'valueEs' => 'Inactivo'],
+            ['name' => User::STATUS_BANNED, 'valueEn' => 'Banned', 'valueEs' => 'Bloqueado'],
         ]);
 
         $this->seedComponents();
