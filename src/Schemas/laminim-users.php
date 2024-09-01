@@ -29,8 +29,8 @@ return Schema::table('lmm_users', User::COMPONENT)
     ->setCountableField('id')
     ->setItemsPerPage(20)
     ->setFieldsForRelatedMode('id', 'getFullName', [])
-    ->setExcludedFieldsForViewFeed('create', ['assignedRoles'])
-    ->setExcludedFieldsForViewFeed('edit', ['assignedRoles'])
+    ->setExcludedFieldsForViewFeed('lmm-create', ['assignedRoles'])
+    ->setExcludedFieldsForViewFeed('lmm-edit', ['assignedRoles'])
     ->addField(
         IdField::define('id')
             ->setLabel('__:lmm.id')
@@ -104,21 +104,24 @@ return Schema::table('lmm_users', User::COMPONENT)
     ->addField(
         ForeignKeysField::defineRelation(UserRole::COMPONENT, 'assignedRoles', 'assigned_roles')
             ->setLabel('__:lmm.asignedRoles')
+            ->configureView(FieldViewConfig::readMode('lmm-index', 'foreign-keys'))
             ->configureView(FieldViewConfig::editMode('lmm-create', 'foreign-keys'))
             ->configureView(FieldViewConfig::editMode('lmm-edit', 'foreign-keys'))
     )
-//    ->addField(
-//        ForeignKeyField::defineRelation(MultimediaItem::COMPONENT, 'photo', 'photo_id')
-//            ->setAvailableOptionsFilter(MultimediaItemWhere::typeIsImage())
-//            ->setLabel('__:lmm.photo')
-//            ->configureView(FieldViewConfig::dataMode('lmm-index'))
-//            ->configureView(FieldViewConfig::editMode('lmm-create', 'lmm-multimedia-item'))
-//            ->configureView(FieldViewConfig::editMode('lmm-edit', 'lmm-multimedia-item'))
-//    )
+    ->addField(
+        ForeignKeyField::defineRelation(MultimediaItem::COMPONENT, 'photo', 'photo_id')
+            ->setAvailableOptionsFilter(MultimediaItemWhere::typeIsImage())
+            ->setLabel('__:lmm.photo')
+            ->setCustomViewName('lmm-index', 'image')
+            ->configureView(FieldViewConfig::dataMode('lmm-index'))
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'lmm-multimedia-item'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'lmm-multimedia-item'))
+    )
     ->setLayout(
         GridLayout::define('lmm-create', 1, [
                 GridLayout::define('main-data', 2, ['name', 'lastName', 'email', 'password']),
                 'assignedRoles',
+                'photo',
                 'hasCustomPermissionsEnabled',
                 'customPermissions',
             ]
@@ -131,6 +134,7 @@ return Schema::table('lmm_users', User::COMPONENT)
                 'createdAt',
                 GridLayout::define('main-data', 2, ['name', 'lastName', 'email', 'password']),
                 'assignedRoles',
+                'photo',
                 'hasCustomPermissionsEnabled',
                 'customPermissions',
             ]

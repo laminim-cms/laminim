@@ -16,11 +16,12 @@
   },
   "dependencies": {
     "laminim-cms-ui": "github:laminim-cms/laminim-cms-ui",
-    "lkt-login": "github:lkt-vue/lkt-login",
     "lkt-accordion": "^1.0.4",
     "lkt-field-editor": "^1.0.5",
     "lkt-http-client": "^1.0.30",
     "lkt-item-crud": "^1.1.24",
+    "lkt-login": "github:lkt-vue/lkt-login",
+    "lkt-tag": "^1.0.1",
     "lkt-vuex-tools": "^1.0.0",
     "vue": "^3.3",
     "vue-router": "^4.2.5",
