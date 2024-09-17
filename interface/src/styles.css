@@ -1,0 +1,81 @@
+.lkt-page-editor-add-menu-button {
+
+    justify-content: flex-start;
+
+    --lkt-btn-bg: #ffffff;
+    --lkt-btn-border-color: #ffffff;
+    --lkt-btn-font-size: 12px;
+    --lkt-btn-font-weight: 400;
+    --lkt-btn-line-height: 1;
+
+
+
+
+
+    /*--lkt-btn-font-family: var(--main-font);*/
+    /*--lkt-btn-text-align: left;*/
+    /*--lkt-btn-text-decoration: none;*/
+    /*--lkt-btn-text-decoration-hover: none;*/
+
+    /*!** Sizing *!*/
+    /*--lkt-btn-width: 100%;*/
+    /*--lkt-btn-min-width: initial;*/
+    /*--lkt-btn-min-height: 28px;*/
+    /*--lkt-btn-padding: 10px;*/
+    /*--lkt-btn-gap: 6px;*/
+
+    /*!** Border *!*/
+    /*--lkt-btn-border-radius: 4px;*/
+    /*--lkt-btn-border-radius-hover: var(--lkt-btn-border-radius);*/
+    /*--lkt-btn-border-width: 1px;*/
+    /*--lkt-btn-border-width-hover: var(--lkt-btn-border-width);*/
+    /*--lkt-btn-border-width-focus: var(--lkt-btn-border-width);*/
+    /*--lkt-btn-border-style: solid;*/
+    /*--lkt-btn-border-style-focus: var(--lkt-btn-border-style);*/
+
+    /*!** Colors *!*/
+    /*--lkt-btn-color: var(--dark-1);*/
+    /*--lkt-btn-bg: #ffffff;*/
+    /*--lkt-btn-border-color: #ffffff;*/
+
+    /*!** Effects *!*/
+    /*--lkt-btn-shadow: none;*/
+    /*--lkt-btn-transition: all linear 100ms;*/
+
+    /*!** State: hover *!*/
+    /*--lkt-btn-color-hover: var(--lkt-btn-color);*/
+    /*--lkt-btn-bg-hover: #92C1B0;*/
+    /*--lkt-btn-border-color-hover: var(--lkt-btn-border-color);*/
+
+    /*!** State: Focus *!*/
+    /*--lkt-btn-border-color-focus: var(--lkt-btn-border-color);*/
+    /*--lkt-btn-shadow-focus: 0 0 0 2px #86AA9C;*/
+
+    /*!** State: Disabled *!*/
+    /*--lkt-btn-color-disabled: var(--dark-1);*/
+    /*--lkt-btn-color-disabled-hover: var(--dark-1);*/
+    /*--lkt-btn-bg-disabled: #CACACA;*/
+    /*--lkt-btn-bg-disabled-hover: #CACACA;*/
+    /*--lkt-btn-border-color-disabled: var(--lkt-btn-border-color);*/
+    /*--lkt-btn-border-color-disabled-hover: var(--lkt-btn-border-color);*/
+    /*--lkt-btn-shadow-disabled: none;*/
+    /*--lkt-btn-shadow-disabled-hover: none;*/
+
+    /*!** Internal image *!*/
+    /*--lkt-button-img-max-width: 50px;*/
+    /*--lkt-button-img-max-height: 50px;*/
+
+    /*!** Split Button *!*/
+    /*--lkt-button-split-arrow-width: 40px;*/
+    /*--lkt-button-split-arrow-bg: transparent;*/
+}
+
+.lkt-page-editor .text-format-button {
+
+    --lkt-btn-bg: #ffffff;
+    --lkt-btn-border-color: #f1f1f1;
+    --lkt-btn-font-size: 12px;
+    --lkt-btn-font-weight: 400;
+    --lkt-btn-line-height: 1;
+
+}

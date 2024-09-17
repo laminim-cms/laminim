@@ -98,6 +98,7 @@ class CmsHttp
         $ins::feedInstance($ins, [
             'email' => $user,
             'password' => $password,
+            'status' => User::STATUS_ACTIVE,
         ]);
         $ins->save();
         $ins->logIn();
@@ -558,6 +559,45 @@ class CmsHttp
 
         $anonymous = Instantiator::make($decodedType, 0);
         $query = $anonymous::getQueryCaller();
+
+
+
+        $viewFilters = clearInput($params['_lmm_view_filters']);
+        if ($viewFilters === '') $viewFilters = 'lmm-filters';
+        $filters = $params['_lmm_filters'];
+        if (is_string($filters)) {
+            $filters = json_decode($filters, true);
+        }
+        if (!$filters) $filters = [];
+
+        $filtersFieldsObjs = $schema->getViewFields($viewFilters);
+        foreach ($filters as $filter => $value) {
+            $field = $filtersFieldsObjs[$filter];
+            if (!is_object($field)) $field = $schema->getField($filter);
+            if (!is_object($field)) continue;
+
+            if ($field instanceof StringChoiceField) {
+                if (is_array($value)) {
+                    $query->andStringIn($field->getColumn(), $value);
+                } else {
+                    $query->andStringEqual($field->getColumn(), clearInput($value));
+                }
+            } elseif ($field instanceof StringField) {
+                if (is_array($value)) {
+                    $query->andStringIn($field->getColumn(), $value);
+                } else {
+                    $query->andStringLike($field->getColumn(), clearInput($value));
+                }
+
+            } elseif ($field instanceof IntegerField) {
+                if (is_array($value)) {
+                    $query->andIntegerIn($field->getColumn(), $value);
+                } else {
+                    $query->andIntegerEqual($field->getColumn(), (int)clearInput($value));
+                }
+            }
+        }
+
         $results = $anonymous::getPage($page, $query);
         $maxPage = $anonymous::getAmountOfPages($query);
 

@@ -4,6 +4,7 @@ namespace LaminimCMS\Schemas;
 
 use LaminimCMS\Generated\MetadataWhere;
 use LaminimCMS\Generated\ModularBlockWhere;
+use LaminimCMS\Generated\VisibilityWhere;
 use LaminimCMS\Instances\Metadata;
 use LaminimCMS\Instances\ModularBlock;
 use LaminimCMS\Instances\Page;
@@ -11,6 +12,7 @@ use LaminimCMS\Instances\User;
 use LaminimCMS\Instances\Visibility;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
+use Lkt\Factory\Schemas\Fields\ForeignKeysField;
 use Lkt\Factory\Schemas\Fields\IdField;
 use Lkt\Factory\Schemas\Fields\RelatedField;
 use Lkt\Factory\Schemas\Fields\StringField;
@@ -63,10 +65,13 @@ return Schema::table('lmm_pages', Page::COMPONENT)
             ->setDefaultValue([User::class, 'getLoggedId'])
     )
     ->addField(
-        RelatedField::defineRelation(ModularBlock::COMPONENT, 'modularBlocks', 'itemId')
+        ForeignKeysField::defineRelation(ModularBlock::COMPONENT, 'modularBlocks', 'blocks')
             ->setAutoRemoveUnlinked()
-            ->addRelatedComponentFeed('type', 'lmm-page')
-            ->setWhere(ModularBlockWhere::typeEqual('lmm-page'))
+            ->addRelatedComponentFeed('type', Page::COMPONENT)
+            ->addRelatedComponentFeed('elementId', function ($referrer) {
+                return $referrer->getId();
+            })
+            ->setWhere(ModularBlockWhere::typeEqual(Page::COMPONENT))
             ->setLabel('__:lmm.modularBlocks')
             ->configureView(FieldViewConfig::editMode('lmm-create', 'lmm-modular-blocks'))
             ->configureView(FieldViewConfig::editMode('lmm-edit', 'lmm-modular-blocks'))
@@ -85,7 +90,7 @@ return Schema::table('lmm_pages', Page::COMPONENT)
             ->setSingleMode()
             ->setReturnsEmptyOneInSingleMode()
             ->addRelatedComponentFeed('itemType', Page::COMPONENT)
-            ->setWhere(MetadataWhere::itemTypeEqual(Page::COMPONENT))
+            ->setWhere(VisibilityWhere::itemTypeEqual(Page::COMPONENT))
             ->setLabel('__:lmm.visibility')
             ->configureView(FieldViewConfig::editMode('lmm-create', 'lmm-visibility'))
             ->configureView(FieldViewConfig::editMode('lmm-edit', 'lmm-visibility'))
@@ -94,8 +99,8 @@ return Schema::table('lmm_pages', Page::COMPONENT)
             'name',
             GridLayout::define('main-data', 2, ['createdAt', 'createdBy']),
             'modularBlocks',
-            'metadata',
             'visibility',
+            'metadata',
         ]
-    ))
+    ), ['lmm-create'])
     ;

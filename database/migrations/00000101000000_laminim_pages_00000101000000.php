@@ -3,7 +3,7 @@
 use Phinx\Migration\AbstractMigration;
 use Phinx\Db\Adapter\MysqlAdapter;
 
-class Laminim00000101000000 extends AbstractMigration
+class LaminimPages00000101000000 extends AbstractMigration
 {
     public function change()
     {
@@ -13,6 +13,7 @@ class Laminim00000101000000 extends AbstractMigration
             ->addColumn('created_by', 'integer', ['default' => 0])
             ->addColumn('name', 'json')
             ->addColumn('status', 'string', ['limit' => 20, 'default' => ''])
+            ->addColumn('blocks', 'text', ['null' => true, 'default' => null])
             ->create();
     }
 }

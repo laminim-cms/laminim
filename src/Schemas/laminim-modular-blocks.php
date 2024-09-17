@@ -10,6 +10,7 @@ use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
 use Lkt\Factory\Schemas\Fields\ForeignKeysField;
 use Lkt\Factory\Schemas\Fields\IdField;
+use Lkt\Factory\Schemas\Fields\IntegerField;
 use Lkt\Factory\Schemas\Fields\StringField;
 use Lkt\Factory\Schemas\InstanceSettings;
 use Lkt\Factory\Schemas\Schema;
@@ -23,17 +24,19 @@ return Schema::table('lmm_modular_blocks', ModularBlock::COMPONENT)
     )
     ->setCountableField('id')
     ->setItemsPerPage(20)
-    ->setFieldsForRelatedMode('', '', ['id', 'name', 'itemId', 'breakpoints', 'modularContent'])
+    ->setFieldsForRelatedMode('', '', [
+        'id',
+        'component',
+        'itemId',
+        'itemType',
+        'className',
+        'blocks',
+        'content',
+        'config',
+        'title',
+        'columns',
+    ])
     ->addField(IdField::define('id'))
-    ->addField(
-        StringField::define('name')
-            ->setIsI18nJson()
-            ->setLabel('__:lmm.name')
-            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
-            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
-    )
-    ->addField(StringField::define('type'))
-    ->addField(StringField::define('itemId', 'item_id'))
     ->addField(DateTimeField::define('createdAt', 'created_at')
         ->setCurrentTimeStampAsDefaultValue()
         ->setDefaultReadFormat('d/m/Y')
@@ -46,5 +49,38 @@ return Schema::table('lmm_modular_blocks', ModularBlock::COMPONENT)
             ->configureView(FieldViewConfig::readMode('lmm-edit', 'foreign-key'))
             ->setDefaultValue([User::class, 'getLoggedId'])
     )
-    ->addField(AssocJSONField::define('breakpoints'))
-    ->addField(ForeignKeysField::defineRelation(ModularContent::COMPONENT, 'modularContent', 'modular_content'));
+    ->addField(StringField::define('component'))
+    ->addField(
+        StringField::define('content')
+            ->setIsI18nJson()
+            ->setLabel('__:lmm.name')
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
+    )
+    ->addField(
+        StringField::define('title')
+            ->setIsI18nJson()
+            ->setLabel('__:lmm.title')
+            ->configureView(FieldViewConfig::editMode('lmm-create', 'text'))
+            ->configureView(FieldViewConfig::editMode('lmm-edit', 'text'))
+    )
+    ->addField(StringField::define('type', 'type'))
+    ->addField(StringField::define('elementId', 'element_id'))
+    ->addField(StringField::define('itemType', 'item_type'))
+    ->addField(ForeignKeyField::define('item', 'item_id')
+        ->setDynamicComponentField('itemType'))
+    ->addField(ForeignKeysField::define('items', 'items_ids')
+        ->setDynamicComponentField('itemType'))
+    ->addField(StringField::define('className', 'class_name'))
+    ->addField(IntegerField::define('columns'))
+
+    ->addField(AssocJSONField::define('config'))
+    ->addField(
+        ForeignKeysField::defineRelation(ModularBlock::COMPONENT, 'blocks')
+            ->addRelatedComponentFeed('type', function ($referrer) {
+                return $referrer->getType();
+            })
+            ->addRelatedComponentFeed('elementId', function ($referrer) {
+                return $referrer->getElementId();
+            })
+    );
