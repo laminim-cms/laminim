@@ -24,6 +24,7 @@ addBasicBlockToEditor(new CustomBasicBlock({
 
 addItemTypeToEditor(new CustomItemType({
     component: 'project',
+    itemType: 'uri-portfolio-project',
     icon: 'icon-globe',
     text: 'Project',
     resource: 'opt-items',
@@ -35,6 +36,7 @@ addItemTypeToEditor(new CustomItemType({
 
 addItemTypeToEditor(new CustomItemType({
     component: 'projects',
+    itemType: 'uri-portfolio-project',
     icon: 'icon-globe',
     text: 'Projects',
     type: 'items',
@@ -47,6 +49,7 @@ addItemTypeToEditor(new CustomItemType({
 
 addItemTypeToEditor(new CustomItemType({
     component: 'featured-projects',
+    itemType: 'uri-portfolio-project',
     icon: 'icon-globe',
     text: 'Featured Projects',
     type: 'auto',
@@ -55,6 +58,7 @@ addItemTypeToEditor(new CustomItemType({
 
 addItemTypeToEditor(new CustomItemType({
     component: 'multimedia',
+    itemType: 'lmm-multimedia',
     icon: 'icon-folder',
     text: 'Image',
     slot: EditorImagePreview,

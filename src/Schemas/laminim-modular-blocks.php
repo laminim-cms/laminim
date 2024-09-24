@@ -6,6 +6,7 @@ use LaminimCMS\Instances\ModularBlock;
 use LaminimCMS\Instances\ModularContent;
 use LaminimCMS\Instances\User;
 use Lkt\Factory\Schemas\Fields\AssocJSONField;
+use Lkt\Factory\Schemas\Fields\BooleanField;
 use Lkt\Factory\Schemas\Fields\DateTimeField;
 use Lkt\Factory\Schemas\Fields\ForeignKeyField;
 use Lkt\Factory\Schemas\Fields\ForeignKeysField;
@@ -22,6 +23,11 @@ return Schema::table('lmm_modular_blocks', ModularBlock::COMPONENT)
             ->setNamespaceForGeneratedClass('LaminimCMS\Generated')
             ->setWhereStoreGeneratedClass(__DIR__ . '/../Generated')
     )
+    ->setExcludedFieldsForViewFeed('', ['items', 'item'])
+    ->setExcludedFieldsForViewFeed('lmm-create', ['items', 'item'])
+    ->setExcludedFieldsForViewFeed('create', ['items', 'item'])
+    ->setExcludedFieldsForViewFeed('lmm-edit', ['items', 'item'])
+    ->setExcludedFieldsForViewFeed('edit', ['items', 'item'])
     ->setCountableField('id')
     ->setItemsPerPage(20)
     ->setFieldsForRelatedMode('', '', [
@@ -29,12 +35,16 @@ return Schema::table('lmm_modular_blocks', ModularBlock::COMPONENT)
         'component',
         'itemId',
         'itemType',
+        'items',
         'className',
+        'icon',
         'blocks',
         'content',
         'config',
         'title',
         'columns',
+        'i18nMode',
+        'i18nTitle',
     ])
     ->addField(IdField::define('id'))
     ->addField(DateTimeField::define('createdAt', 'created_at')
@@ -67,11 +77,17 @@ return Schema::table('lmm_modular_blocks', ModularBlock::COMPONENT)
     ->addField(StringField::define('type', 'type'))
     ->addField(StringField::define('elementId', 'element_id'))
     ->addField(StringField::define('itemType', 'item_type'))
+
     ->addField(ForeignKeyField::define('item', 'item_id')
         ->setDynamicComponentField('itemType'))
+
     ->addField(ForeignKeysField::define('items', 'items_ids')
         ->setDynamicComponentField('itemType'))
+
     ->addField(StringField::define('className', 'class_name'))
+    ->addField(StringField::define('icon'))
+    ->addField(BooleanField::define('i18nMode', 'i18n_mode'))
+    ->addField(StringField::define('i18nTitle', 'i18n_title'))
     ->addField(IntegerField::define('columns'))
 
     ->addField(AssocJSONField::define('config'))

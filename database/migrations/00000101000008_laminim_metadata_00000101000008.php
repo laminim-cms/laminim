@@ -17,6 +17,7 @@ class LaminimMetadata00000101000008 extends AbstractMigration
 
             ->addColumn('title', 'string', ['limit' => 255, 'default' => ''])
             ->addColumn('url', 'string', ['limit' => 255, 'default' => ''])
+            ->addColumn('generated_url', 'string', ['limit' => 255, 'default' => ''])
             ->addColumn('description', 'text', ['null' => true, 'default' => null])
             ->addColumn('keywords', 'text', ['null' => true, 'default' => null])
             ->create();
