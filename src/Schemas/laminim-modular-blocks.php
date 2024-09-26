@@ -43,6 +43,8 @@ return Schema::table('lmm_modular_blocks', ModularBlock::COMPONENT)
         'config',
         'title',
         'columns',
+        'customTitle',
+        'hiddenTitle',
         'i18nMode',
         'i18nTitle',
     ])
@@ -86,7 +88,9 @@ return Schema::table('lmm_modular_blocks', ModularBlock::COMPONENT)
 
     ->addField(StringField::define('className', 'class_name'))
     ->addField(StringField::define('icon'))
+    ->addField(BooleanField::define('customTitle', 'custom_title'))
     ->addField(BooleanField::define('i18nMode', 'i18n_mode'))
+    ->addField(BooleanField::define('hiddenTitle', 'hidden_title'))
     ->addField(StringField::define('i18nTitle', 'i18n_title'))
     ->addField(IntegerField::define('columns'))
 

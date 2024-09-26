@@ -24,6 +24,8 @@ class LaminimModularBlocks00000101000001 extends AbstractMigration
             ->addColumn('class_name', 'string', ['limit' => 255, 'default' => ''])
             ->addColumn('icon', 'string', ['limit' => 255, 'default' => ''])
             ->addColumn('config', 'text', ['null' => true, 'default' => null])
+            ->addColumn('custom_title', 'boolean', ['default' => false])
+            ->addColumn('hidden_title', 'boolean', ['default' => false])
             ->addColumn('i18n_mode', 'boolean', ['default' => false])
             ->addColumn('i18n_title', 'string', ['limit' => 255, 'default' => ''])
             ->create();

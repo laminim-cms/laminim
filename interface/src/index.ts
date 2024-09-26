@@ -1,6 +1,10 @@
 import {createLaminimCmsApp, setBeforeEachRouteCallback} from "laminim-cms-ui";
 
+import "laminim-cms-ui/theme"
 import "laminim-cms-ui/styles"
+import "laminim-cms-ui/app/icons"
+import "laminim-cms-ui/app/styles"
+
 import "lkt-page-editor/theme/default"
 import "lkt-page-editor/styles"
 import "lkt-tooltip/styles"
@@ -10,8 +14,7 @@ import "./styles.css"
 import LktTooltip from "lkt-tooltip";
 import LktImage from "lkt-image";
 
-import {addItemTypeToEditor, CustomItemType, addBasicBlockToEditor, CustomBasicBlock} from "lkt-page-editor";
-import EditorImagePreview from "./slots/EditorImagePreview.vue";
+import {addBasicBlockToEditor, addItemTypeToEditor, CustomBasicBlock, CustomItemType} from "lkt-page-editor";
 
 
 addBasicBlockToEditor(new CustomBasicBlock({
@@ -25,7 +28,7 @@ addBasicBlockToEditor(new CustomBasicBlock({
 addItemTypeToEditor(new CustomItemType({
     component: 'project',
     itemType: 'uri-portfolio-project',
-    icon: 'icon-globe',
+    icon: 'icon-list-check',
     text: 'Project',
     resource: 'opt-items',
     resourceData: {
@@ -35,9 +38,22 @@ addItemTypeToEditor(new CustomItemType({
 
 
 addItemTypeToEditor(new CustomItemType({
+    component: 'user-persona',
+    itemType: 'uri-sample-user',
+    icon: 'icon-user-o',
+    text: 'User Persona',
+    resource: 'opt-items',
+    resourceData: {
+        _lmm_type: 'uri-sample-user',
+        type: 'user-persona',
+    }
+}));
+
+
+addItemTypeToEditor(new CustomItemType({
     component: 'projects',
     itemType: 'uri-portfolio-project',
-    icon: 'icon-globe',
+    icon: 'icon-list-check',
     text: 'Projects',
     type: 'items',
     resource: 'opt-items',
@@ -50,30 +66,15 @@ addItemTypeToEditor(new CustomItemType({
 addItemTypeToEditor(new CustomItemType({
     component: 'featured-projects',
     itemType: 'uri-portfolio-project',
-    icon: 'icon-globe',
+    icon: 'icon-list-check',
     text: 'Featured Projects',
     type: 'auto',
 }));
 
-
-addItemTypeToEditor(new CustomItemType({
-    component: 'multimedia',
-    itemType: 'lmm-multimedia',
-    icon: 'icon-folder',
-    text: 'Image',
-    slot: EditorImagePreview,
-    resource: 'opt-items',
-    resourceData: {
-        _lmm_type: 'multimedia',
-        _lmm_filters: JSON.stringify({
-            type: 'image',
-        })
-    }
-}));
-
 addItemTypeToEditor(new CustomItemType({
     component: 'benchmark',
-    icon: 'icon-globe',
+    itemType: 'uri-portfolio-benchmark',
+    icon: 'icon-compass-fill',
     text: 'Benchmark',
     resource: 'opt-items',
     resourceData: {
