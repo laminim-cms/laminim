@@ -62,7 +62,8 @@ class CmsHttp
         Laminim::loadI18n();
         $response = Translations::getLangTranslations(Locale::getLangCode());
         return Response::ok([
-            'data' => $response
+            'data' => $response,
+            'lang' => Locale::getLangCode(),
         ]);
     }
 
