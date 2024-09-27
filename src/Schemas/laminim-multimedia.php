@@ -61,7 +61,7 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
     )
     ->addField(
         FileField::define('src')
-            ->setLabel('__:lmm.src')
+            ->setLabel('__:lmm.file')
             ->setDefaultValue('')
             ->setPublicPath('/laminim/open/:component/:field/:id')
             ->setStorePath(APP_DIR . '/private/multimedia')

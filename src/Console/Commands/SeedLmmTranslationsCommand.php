@@ -103,6 +103,26 @@ class SeedLmmTranslationsCommand extends Command
             'es' => 'Tipo',
         ]);
 
+        Translation::ensureKey($stack, 'src', 'text', [
+            'en' => 'Source',
+            'es' => 'Origen',
+        ]);
+
+        Translation::ensureKey($stack, 'file', 'text', [
+            'en' => 'File',
+            'es' => 'Archivo',
+        ]);
+
+        Translation::ensureKey($stack, 'image', 'text', [
+            'en' => 'Image',
+            'es' => 'Imagen',
+        ]);
+
+        Translation::ensureKey($stack, 'description', 'text', [
+            'en' => 'Description',
+            'es' => 'Descripción',
+        ]);
+
         Translation::ensureKey($stack, 'name', 'text', [
             'en' => 'Name',
             'es' => 'Nombre',
@@ -307,6 +327,16 @@ class SeedLmmTranslationsCommand extends Command
         Translation::ensureKey($stack, 'role.one', 'text', [
             'en' => 'Role',
             'es' => 'Rol',
+        ]);
+
+        Translation::ensureKey($stack, 'lmm-metadata.many', 'text', [
+            'en' => 'Metadata',
+            'es' => 'Metadatos',
+        ]);
+
+        Translation::ensureKey($stack, 'lmm-metadata.one', 'text', [
+            'en' => 'Metadata',
+            'es' => 'Metadatos',
         ]);
 
         Translation::ensureKey($stack, 'i18n.many', 'text', [

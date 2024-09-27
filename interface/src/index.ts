@@ -16,6 +16,16 @@ import LktImage from "lkt-image";
 
 import {addBasicBlockToEditor, addItemTypeToEditor, CustomBasicBlock, CustomItemType} from "lkt-page-editor";
 
+import {setFieldUndoText, setFieldClearText, setFieldSwitchEditionOnText, setFieldSwitchEditionOffText, setFieldShowPasswordOnText, setFieldShowPasswordOffText} from "lkt-field-text";
+
+
+setFieldUndoText('Deshacer');
+setFieldClearText('Limpiar');
+setFieldSwitchEditionOnText('Modo lectura');
+setFieldSwitchEditionOffText('Modo edición');
+setFieldShowPasswordOnText('Ocultar contraseña');
+setFieldShowPasswordOffText('Mostrar contraseña');
+
 
 addBasicBlockToEditor(new CustomBasicBlock({
     component: 'icon-h2',

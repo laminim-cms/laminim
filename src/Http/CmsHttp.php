@@ -64,6 +64,7 @@ class CmsHttp
         return Response::ok([
             'data' => $response,
             'lang' => Locale::getLangCode(),
+            'languages' => ['es', 'en'],
         ]);
     }
 
