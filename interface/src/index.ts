@@ -27,14 +27,6 @@ setFieldShowPasswordOnText('Ocultar contraseña');
 setFieldShowPasswordOffText('Mostrar contraseña');
 
 
-addBasicBlockToEditor(new CustomBasicBlock({
-    component: 'icon-h2',
-    icon: 'icon-globe',
-    text: 'H2 + Icon',
-    contentEnabled: true
-}));
-
-
 addItemTypeToEditor(new CustomItemType({
     component: 'project',
     itemType: 'uri-portfolio-project',
