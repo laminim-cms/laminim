@@ -34,9 +34,9 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
         DateTimeField::define('createdAt', 'created_at')
             ->setLabel('__:lmm.createdAt')
             ->setCurrentTimeStampAsDefaultValue()
-            ->setDefaultReadFormat('d/m/Y')
-            ->setLangDefaultReadFormat('d/m/Y', 'es')
-            ->setLangDefaultReadFormat('Y-m-d', 'en')
+            ->setDefaultReadFormat('Y-m-d')
+//            ->setLangDefaultReadFormat('d/m/Y', 'es')
+//            ->setLangDefaultReadFormat('Y-m-d', 'en')
             ->configureView(FieldViewConfig::readMode('lmm-edit', 'date'))
     )
     ->addField(
@@ -113,6 +113,9 @@ return Schema::table('lmm_multimedia', MultimediaItem::COMPONENT)
                         ], [
                             'src' => 'data',
                             'url' => 'edit',
+                        ])
+                        ->setConditionalTypes('type', MultimediaItem::TYPE_IMAGE, [
+                            'src' => 'image',
                         ]),
                 ]),
                 'mime',
