@@ -27,9 +27,9 @@ Schema::add(require_once "Schemas/laminim-metadata.php");
 Schema::add(require_once "Schemas/laminim-visibility.php");
 
 // Load menu
-LaminimMenuEntry::register(
-    LaminimMenuEntry::define('pages', '/laminim/page', '__:components.page.many', 'icon-stickies')
-);
+//LaminimMenuEntry::register(
+//    LaminimMenuEntry::define('pages', '/laminim/page', '__:components.page.many', 'icon-stickies')
+//);
 
 LaminimMenuEntry::register(
     LaminimMenuEntry::define('users', '', '__:components.user.many', 'icon-users-cog')

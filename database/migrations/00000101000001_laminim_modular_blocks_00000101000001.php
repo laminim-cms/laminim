@@ -7,6 +7,7 @@ class LaminimModularBlocks00000101000001 extends AbstractMigration
 {
     public function change()
     {
+        return;
         $this
             ->table('lmm_modular_blocks', ['collation' => 'utf8_general_ci'])
             ->addColumn('created_at', 'datetime', ['null' => true, 'default' => 'CURRENT_TIMESTAMP'])
