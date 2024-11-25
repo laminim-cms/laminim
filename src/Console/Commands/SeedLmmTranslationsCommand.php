@@ -2,7 +2,6 @@
 
 namespace LaminimCMS\Console\Commands;
 
-use LaminimCMS\Instances\ModularOption;
 use LaminimCMS\Instances\MultimediaItem;
 use LaminimCMS\Instances\Translation;
 use LaminimCMS\Instances\TranslationStack;
